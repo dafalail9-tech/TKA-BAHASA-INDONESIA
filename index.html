@@ -112,7 +112,7 @@
         &copy; 2026 Modul Simulasi Akademik • TKA Bahasa Indonesia
     </footer>
 
-    <!-- SCRIPT APLIKASI (30 SOAL + SHEETDB API) -->
+    <!-- SCRIPT APLIKASI -->
     <script>
         const API_URL = "https://sheetdb.io/api/v1/xgqfzrs7vsvxa";
 
@@ -444,7 +444,6 @@
             const skorAkhir = Math.round(skorTotal);
             document.getElementById("final-score").textContent = skorAkhir;
 
-            // KIRIM NILAI KE GOOGLE SHEET VIA SHEETDB
             kirimDanMuatNilai(namaSiswa, skorAkhir);
         }
 
