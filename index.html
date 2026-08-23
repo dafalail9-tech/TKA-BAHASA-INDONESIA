@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tryout TKA Bahasa Indonesia 2026</title>
+    <title>Tryout TKA Bahasa Indonesia 2026 - 30 Soal</title>
     <!-- Tailwind CSS CDN untuk Styling Modern -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -14,7 +14,7 @@
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-wide">TKA Bahasa Indonesia 2026</h1>
             <div id="timer-box" class="hidden bg-indigo-700 px-3 py-1 rounded-lg text-sm font-semibold">
-                Sisa Waktu: <span id="time-left">05:00</span>
+                Sisa Waktu: <span id="time-left">45:00</span>
             </div>
         </div>
     </header>
@@ -24,9 +24,9 @@
 
         <!-- HALAMAN SELAMAT DATANG (WELCOME SCREEN) -->
         <div id="welcome-screen" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center max-w-xl mx-auto mt-10">
-            <h2 class="text-2xl font-bold text-slate-900 mb-3">Simulasi Ujian TKA Bahasa Indonesia</h2>
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">Simulasi Ujian TKA Bahasa Indonesia (30 Soal)</h2>
             <p class="text-slate-600 mb-6 text-sm leading-relaxed">
-                Uji kemampuan membaca kritis, penalaran inferensial, dan evaluasi teks Anda sesuai standar kisi-kisi terbaru. Tes ini dilengkapi dengan batas waktu dan pembahasan otomatis.
+                Uji kemampuan membaca kritis, penalaran inferensial, dan evaluasi teks lengkap dengan 30 butir soal standar asesmen nasional. Waktu pengerjaan total adalah 45 menit.
             </p>
             <button onclick="mulaiUjian()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-md">
                 Mulai Ujian Sekarang
@@ -37,8 +37,8 @@
         <div id="quiz-screen" class="hidden space-y-6">
             <!-- Progress & Info Soal -->
             <div class="flex justify-between items-center bg-white px-6 py-3 rounded-xl border border-slate-200 shadow-sm text-sm font-medium">
-                <span id="question-number" class="text-indigo-600">Soal 1 dari 3</span>
-                <span id="category-badge" class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Pemahaman Inferensial</span>
+                <span id="question-number" class="text-indigo-600">Soal 1 dari 30</span>
+                <span id="category-badge" class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Kategori</span>
             </div>
 
             <!-- Box Stimulus & Pertanyaan -->
@@ -103,9 +103,8 @@
         &copy; 2026 Modul Simulasi Akademik • TKA Bahasa Indonesia
     </footer>
 
-    <!-- SCRIPT LOGIKA APLIKASI -->
+    <!-- SCRIPT LOGIKA APLIKASI (30 SOAL) -->
     <script>
-        // Database Bank Soal TKA Bahasa Indonesia
         const bankSoal = [
             {
                 id: 1,
@@ -118,7 +117,7 @@
                     "C. Alih fungsi lahan hijau tidak berdampak pada resapan air.",
                     "D. Pemerintah wajib menghentikan seluruh proyek jalan tol."
                 ],
-                kunci: 1, // Indeks pilihan B (0=A, 1=B, dst)
+                kunci: 1,
                 pembahasan: "Simpulan mencakup dua sisi teks secara objektif: keuntungan percepatan logistik dan risiko ancaman lingkungan."
             },
             {
@@ -132,7 +131,7 @@
                     "C. Seluruh warga kota wajib menjual hasil panen ke pasar tradisional.",
                     "D. Program ini hanya berfokus pada keindahan estetika pemukiman tanpa fungsi ekonomi."
                 ],
-                kunci: 1, // Pilihan B
+                kunci: 1,
                 pembahasan: "Program ini berasumsi bahwa pemanfaatan pekarangan sempit dapat menghasilkan tanaman produktif yang berdampak langsung pada kebutuhan rumah tangga."
             },
             {
@@ -146,15 +145,393 @@
                     "C. Guru tetap menjadi satu-satunya sumber ilmu pengetahuan utama.",
                     "D. Peran guru di dalam kelas ditiadakan dalam sistem pendidikan modern."
                 ],
-                kunci: 1, // Pilihan B
+                kunci: 1,
                 pembahasan: "Teks secara tersurat menyatakan bahwa guru bertransformasi menjadi fasilitator dan pengarah moral, bukan lagi sumber informasi tunggal."
+            },
+            {
+                id: 4,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Kebiasaan membaca buku fisik di kalangan generasi muda dikabarkan menurun drastis seiring maraknya platform video pendek. Padahal, membaca buku secara mendalam terbukti melatih rentang perhatian (*attention span*) dan kemampuan berpikir analitis yang lebih baik.",
+                pertanyaan: "Implikasi apa yang paling mungkin terjadi jika tren penurunan membaca buku terus berlanjut?",
+                pilihan: [
+                    "A. Generasi muda akan semakin mahir dalam melakukan analisis mendalam.",
+                    "B. Kemampuan berpikir analitis dan rentang perhatian anak muda berpotensi melemah.",
+                    "C. Platform video pendek akan gulung tikar dalam waktu dekat.",
+                    "D. Buku fisik akan mengalami kelangkaan bahan baku kertas."
+                ],
+                kunci: 1,
+                pembahasan: "Implikasi logis dari hilangnya kebiasaan membaca mendalam adalah penurunan kemampuan analitis dan rentang perhatian."
+            },
+            {
+                id: 5,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Dalam sebuah artikel kesehatan disebutkan bahwa mengonsumsi suplemen vitamin C dosis tinggi setiap hari dapat menyembuhkan segala jenis penyakit flu dalam waktu satu jam tanpa efek samping apa pun.",
+                pertanyaan: "Manakah penilaian yang paling objektif terhadap klaim dalam artikel tersebut?",
+                pilihan: [
+                    "A. Klaim tersebut sepenuhnya benar karena vitamin C sangat baik untuk tubuh.",
+                    "B. Klaim tersebut berlebihan dan tidak didukung oleh bukti medis yang kredibel.",
+                    "C. Artikel tersebut wajib disebarluaskan kepada seluruh masyarakat.",
+                    "D. Suplemen vitamin C adalah obat terlarang yang berbahaya."
+                ],
+                kunci: 1,
+                pembahasan: "Klaim menyembuhkan 'segala jenis flu dalam satu jam tanpa efek samping' adalah klaim pseudosains yang berlebihan."
+            },
+            {
+                id: 6,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Museum Bahari di Jakarta Utara menyimpan berbagai koleksi yang berkaitan dengan sejarah kebaharian bangsa Indonesia, mulai dari perahu tradisional hingga meriam kuno peninggalan VOC.",
+                pertanyaan: "Berdasarkan teks di atas, koleksi apa saja yang dapat ditemukan di Museum Bahari?",
+                pilihan: [
+                    "A. Pesawat terbang purba dan fosil dinosaurus.",
+                    "B. Perahu tradisional dan meriam kuno peninggalan VOC.",
+                    "C. Kain tenun tradisional dari berbagai daerah.",
+                    "D. Lukisan modern karya pelukis ternama dunia."
+                ],
+                kunci: 1,
+                pembahasan: "Informasi tersurat menyatakan koleksi museum mencakup perahu tradisional dan meriam kuno VOC."
+            },
+            {
+                id: 7,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Meskipun harga cabai di pasaran melonjak hingga dua kali lipat menjelang hari raya, para pedagang kuliner skala kecil tetap harus bertahan dengan tidak menaikkan harga porsi makanan agar pelanggan tidak lari.",
+                pertanyaan: "Apa dampak langsung yang dialami oleh pedagang kuliner kecil berdasarkan situasi tersebut?",
+                pilihan: [
+                    "A. Keuntungan atau margin laba mereka mengalami penurunan.",
+                    "B. Jumlah pembeli meningkat secara drastis.",
+                    "C. Modal usaha mereka bertambah besar.",
+                    "D. Harga cabai di pasaran berangsur-angsur turun."
+                ],
+                kunci: 0,
+                pembahasan: "Harga bahan baku naik tetapi harga jual tetap, otomatis margin keuntungan pedagang akan menyusut."
+            },
+            {
+                id: 8,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Sebuah surat kabar lokal memberitakan bahwa tingkat kemacetan di ibu kota berhasil turun 50% setelah diterapkannya sistem ganjil-genap di seluruh ruas jalan utama.",
+                pertanyaan: "Manakah informasi tambahan yang paling diperlukan untuk memverifikasi keakuratan berita tersebut?",
+                pilihan: [
+                    "A. Data jumlah volume kendaraan harian sebelum dan sesudah kebijakan diterapkan.",
+                    "B. Harga bahan bakar minyak di SPBU terdekat.",
+                    "C. Jadwal libur nasional pada tahun tersebut.",
+                    "D. Jumlah penduduk yang menggunakan kendaraan roda dua."
+                ],
+                kunci: 0,
+                pembahasan: "Untuk membuktikan klaim penurunan kemacetan, diperlukan data pembanding volume kendaraan riil di lapangan."
+            },
+            {
+                id: 9,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Sistem irigasi Subak di Bali tidak hanya berfungsi sebagai pengatur air sawah secara teknis, tetapi juga merefleksikan filosofi hidup masyarakat Bali yang menjunjung tinggi keharmonisan alam dan sesama manusia (Tri Hita Karana).",
+                pertanyaan: "Apakah fungsi utama sistem Subak di Bali menurut teks?",
+                pilihan: [
+                    "A. Tempat wisata air terbesar di Asia Tenggara.",
+                    "B. Pengatur air sawah sekaligus cerminan filosofi keharmonisan.",
+                    "C. Sistem pertahanan militer tradisional kerajaan Bali.",
+                    "D. Waduk buatan modern untuk Pembangkit Listrik Tenaga Air."
+                ],
+                kunci: 1,
+                pembahasan: "Teks menjelaskan Subak berfungsi sebagai pengatur air sawah sekaligus merefleksikan filosofi keharmonisan."
+            },
+            {
+                id: 10,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Penyu hijau merupakan salah satu hewan dilindungi karena populasinya yang terus terancam oleh perburuan liar dan kerusakan habitat pesisir pantai tempat mereka bertelur.",
+                pertanyaan: "Apa kesimpulan utama yang dapat diambil mengenai kondisi penyu hijau saat ini?",
+                pilihan: [
+                    "A. Populasinya aman dan jumlahnya melimpah di setiap pantai.",
+                    "B. Hewan tersebut berada dalam status terancam punah akibat ulah manusia.",
+                    "C. Penyu hijau sudah tidak pernah terlihat lagi di habitat alaminya.",
+                    "D. Perburuan liar tidak berpengaruh pada kelangsungan hidup penyu."
+                ],
+                kunci: 1,
+                pembahasan: "Ancaman perburuan liar dan kerusakan habitat menyimpulkan bahwa hewan ini berada dalam status konservasi yang terancam."
+            },
+            {
+                id: 11,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Novel sejarah karya Pramoedya Ananta Toer sering kali mengangkat latar perjuangan pergerakan nasional dengan gaya bahasa yang tajam, kaya emosi, dan sarat kritik sosial terhadap kolonialisme.",
+                pertanyaan: "Unsur apa yang paling dominan dievaluasi dari karya sastra dalam teks tersebut?",
+                pilihan: [
+                    "A. Kelengkapan rumus fisika di dalamnya.",
+                    "B. Karakteristik gaya bahasa dan muatan kritik sosial.",
+                    "C. Ketepatan data statistik keuangan masa lampau.",
+                    "D. Desain sampul dan jumlah halaman buku."
+                ],
+                kunci: 1,
+                pembahasan: "Teks menyoroti gaya bahasa yang tajam dan sarat kritik sosial, yang merupakan unsur intrinsik/ekstrinsik sastra."
+            },
+            {
+                id: 12,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Berdasarkan laporan cuaca BMKG, wilayah pesisir selatan Jawa diperkirakan akan mengalami gelombang tinggi hingga mencapai 4 meter dalam tiga hari ke depan akibat hembusan angin kencang dari Samudra Hindia.",
+                pertanyaan: "Berapa perkiraan ketinggian gelombang maksimum di pesisir selatan Jawa?",
+                pilihan: [
+                    "A. 1 meter",
+                    "B. 2 meter",
+                    "C. 3 meter",
+                    "D. 4 meter"
+                ],
+                kunci: 3,
+                pembahasan: "Teks secara tersurat menyebutkan gelombang tinggi hingga mencapai 4 meter."
+            },
+            {
+                id: 13,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Peningkatan penggunaan kendaraan listrik secara masif diprediksi mampu menekan emisi karbon di perkotaan secara signifikan, meskipun tantangan penyediaan infrastruktur stasiun pengisian daya masih menjadi pekerjaan rumah utama.",
+                pertanyaan: "Apa makna tersirat mengenai kesiapan adopsi kendaraan listrik saat ini?",
+                pilihan: [
+                    "A. Infrastruktur pendukungnya sudah sangat sempurna di seluruh pelosok.",
+                    "B. Potensi positifnya besar, namun masih terkendala fasilitas pengisian daya.",
+                    "C. Kendaraan listrik tidak memberikan pengaruh apa pun terhadap lingkungan.",
+                    "D. Pemerintah melarang penggunaan kendaraan berbasis bahan bakar fosil."
+                ],
+                kunci: 1,
+                pembahasan: "Frasa 'tantangan penyediaan infrastruktur... masih menjadi pekerjaan rumah' menyiratkan adanya kendala fasilitas."
+            },
+            {
+                id: 14,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Sebuah iklan produk pembersih lantai mengklaim bahwa cairan produknya mampu membunuh 100% kuman berbahaya di lantai rumah hanya dalam satu kali usapan lembut.",
+                pertanyaan: "Manakah kritik yang paling logis terhadap klaim iklan tersebut?",
+                pilihan: [
+                    "A. Angka 100% mutlak terbukti secara ilmiah tanpa pengecualian.",
+                    "B. Dalam dunia mikrobiologi, klaim efektivitas 100% mutlak sangat jarang realistis dan biasanya bersifat hiperbola iklan.",
+                    "C. Produk pembersih lantai memang dirancang untuk merusak lantai.",
+                    "D. Kuman di rumah tidak pernah bisa dibersihkan dengan cairan apa pun."
+                ],
+                kunci: 1,
+                pembahasan: "Klaim absolut 100% dalam dunia sains/produk pembersih umumnya merupakan gaya bahasa hiperbola pemasaran."
+            },
+            {
+                id: 15,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Batik tulis tradisional melalui proses pembuatan yang panjang menggunakan canting dan malam (lilin khusus), di mana setiap corak digambar secara manual oleh perajin dengan tingkat ketelitian tinggi.",
+                pertanyaan: "Alat apa yang digunakan untuk menggoreskan malam pada proses pembuatan batik tulis?",
+                pilihan: [
+                    "A. Kuas cat tembok",
+                    "B. Canting",
+                    "C. Stempel tembaga",
+                    "D. Mesin cetak digital"
+                ],
+                kunci: 1,
+                pembahasan: "Secara tersurat disebutkan bahwa batik tulis menggunakan canting dan malam."
+            },
+            {
+                id: 16,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Penerapan sistem kerja jarak jauh (*remote working*) membuat banyak perusahaan menyadari bahwa produktivitas karyawan tidak harus diukur dari kehadiran fisik di kantor setiap hari.",
+                pertanyaan: "Bagaimanakah pergeseran pandangan perusahaan terhadap produktivitas kerja?",
+                pilihan: [
+                    "A. Produktivitas kini dinilai dari hasil kerja nyata, bukan sekadar absensi fisik.",
+                    "B. Perusahaan mewajibkan seluruh karyawan tidur di kantor.",
+                    "C. Kehadiran fisik di kantor menjadi satu-satunya indikator kesuksesan.",
+                    "D. Pekerja jarak jauh terbukti memiliki kinerja yang buruk."
+                ],
+                kunci: 0,
+                pembahasan: "Kesimpulan logis dari teks adalah penilaian kinerja bergeser dari kehadiran fisik ke pencapaian hasil kerja."
+            },
+            {
+                id: 17,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Pementasan teater pelajar sekolah menengah kemarin dinilai sukses besar karena penonton terhanyut dalam emosi cerita, meskipun tata panggung sempat mengalami sedikit gangguan teknis lampu di awal babak pertama.",
+                pertanyaan: "Bagaimanakah penilaian menyeluruh terhadap pementasan teater tersebut?",
+                pilihan: [
+                    "A. Gagal total karena ada gangguan teknis.",
+                    "B. Sukses secara emosional meskipun ada sedikit kendala teknis awal.",
+                    "C. Tidak menarik sama sekali bagi penonton.",
+                    "D. Sempurna tanpa ada cacat sedikit pun."
+                ],
+                kunci: 1,
+                pembahasan: "Teks menyatakan sukses besar karena penonton terhanyut, dengan catatan ada sedikit gangguan lampu di awal."
+            },
+            {
+                id: 18,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Rempah-rempah nusantara seperti lala, pala, dan cengkih menjadi komoditas utama yang menarik bangsa-bangsa Eropa datang berlayar ke Nusantara pada abad ke-16.",
+                pertanyaan: "Komoditas apa yang menjadi daya tarik utama bangsa Eropa datang ke Nusantara?",
+                pilihan: [
+                    "A. Kendaraan bermotor",
+                    "B. Rempah-rempah",
+                    "C. Perangkat elektronik",
+                    "D. Tekstil modern"
+                ],
+                kunci: 1,
+                pembahasan: "Informasi tersurat menyatakan rempah-rempah nusantara adalah daya tarik utama pelayaran bangsa Eropa."
+            },
+            {
+                id: 19,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Penggunaan kantong plastik sekali pakai di pusat perbelanjaan modern kini mulai banyak ditinggalkan dan digantikan oleh tas belanja ramah lingkungan yang dapat digunakan berulang kali.",
+                pertanyaan: "Apa tujuan utama dari perubahan kebiasaan tersebut?",
+                pilihan: [
+                    "A. Meningkatkan pengeluaran belanja konsumen setiap hari.",
+                    "B. Mengurangi volume sampah plastik yang mencemari lingkungan.",
+                    "C. Menambah jumlah produksi kantong plastik di pabrik.",
+                    "D. Mempersulit masyarakat saat berbelanja."
+                ],
+                kunci: 1,
+                pembahasan: "Penggantian plastik sekali pakai dengan tas ramah lingkungan bertujuan untuk mengurangi limbah sampah plastik."
+            },
+            {
+                id: 20,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Sebuah buku panduan bercocok tanam memberikan langkah-langkah yang runtut mulai dari pemilihan bibit, penyemaian, perawatan, hingga teknik pemupukan organik yang mudah dipahami oleh pemula.",
+                pertanyaan: "Manakah pujian yang paling tepat untuk buku panduan tersebut?",
+                pilihan: [
+                    "A. Buku tersebut sangat komunikatif dan aplikatif bagi pemula.",
+                    "B. Buku tersebut membosankan dan terlalu rumit dibaca.",
+                    "C. Buku tersebut berisi dongeng fiksi fiktif belaka.",
+                    "D. Buku tersebut sama sekali tidak berguna bagi petani."
+                ],
+                kunci: 0,
+                pembahasan: "Langkah runtut dan mudah dipahami oleh pemula menunjukkan buku tersebut komunikatif dan aplikatif."
+            },
+            {
+                id: 21,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Komodo (*Varanus komodoensis*) adalah spesies kadal raksasa endemik yang hanya dapat ditemukan di beberapa pulau di Nusa Tenggara Timur, seperti Pulau Komodo dan Rinca.",
+                pertanyaan: "Di wilayah manakah komodo dapat ditemukan secara alami?",
+                pilihan: [
+                    "A. Pulau Sumatera dan Kalimantan",
+                    "B. Pulau Komodo dan Rinca di Nusa Tenggara Timur",
+                    "C. Pulau Jawa bagian selatan",
+                    "D. Kepulauan Maluku Utara"
+                ],
+                kunci: 1,
+                pembahasan: "Teks secara tersurat menyebutkan habitat asli komodo di Pulau Komodo dan Rinca, NTT."
+            },
+            {
+                id: 22,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Meskipun fasilitas perpustakaan sekolah telah direnovasi menjadi jauh lebih modern dan nyaman, tingkat kunjungan siswa untuk membaca buku di dalam ruangan masih tergolong rendah.",
+                pertanyaan: "Apa simpulan logis dari kondisi perpustakaan tersebut?",
+                pilihan: [
+                    "A. Renovasi fisik saja belum tentu otomatis mengubah minat baca siswa secara instan.",
+                    "B. Siswa dilarang keras memasuki area perpustakaan modern.",
+                    "C. Buku-buku yang disediakan di perpustakaan jumlahnya sangat banyak.",
+                    "D. Fasilitas modern membuat siswa malas belajar."
+                ],
+                kunci: 0,
+                pembahasan: "Fasilitas bagus (renovasi) belum tentu berbanding lurus dengan tingginya minat kunjungan jika motivasi literasi belum terbentuk."
+            },
+            {
+                id: 23,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Penyanyi muda itu membawakan lagu daerah dengan aransemen musik jazz kontemporer, memadukan unsur tradisional dan modern secara harmonis tanpa menghilangkan esensi aslinya.",
+                pertanyaan: "Bagaimanakah bentuk apresiasi yang tepat terhadap karya musik tersebut?",
+                pilihan: [
+                    "A. Inovasi yang patut diapresiasi karena berhasil menjembatani musik tradisional dan modern.",
+                    "B. Perusakan total terhadap warisan budaya leluhur bangsa.",
+                    "C. Tindakan plagiarisme yang melanggar hak cipta lagu daerah.",
+                    "D. Musik yang sama sekali tidak enak didengar."
+                ],
+                kunci: 0,
+                pembahasan: "Memadukan unsur tradisional dan modern secara harmonis tanpa merusak esensi adalah bentuk inovasi positif."
+            },
+            {
+                id: 24,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Sistem tanam paksa (*cultuurstelsel*) yang diterapkan oleh Gubernur Jenderal Johannes van den Bosch pada masa kolonial Belanda mewajibkan petani menyisihkan sebagian tanahnya untuk ditanami tanaman ekspor.",
+                pertanyaan: "Siapakah tokoh yang menerapkan sistem tanam paksa di Indonesia?",
+                pilihan: [
+                    "A. Herman Willem Daendels",
+                    "B. Thomas Stamford Raffles",
+                    "C. Johannes van den Bosch",
+                    "D. Jan Pieterszoon Coen"
+                ],
+                kunci: 2,
+                pembahasan: "Informasi tersurat menyebutkan nama Johannes van den Bosch sebagai penggagas sistem tanam paksa."
+            },
+            {
+                id: 25,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Penggunaan gawai yang berlebihan pada anak-anak usia dini sering kali dikaitkan dengan penurunan kemampuan interaksi sosial secara langsung dengan teman sebaya.",
+                pertanyaan: "Apa akibat tidak langsung dari kecanduan gawai pada anak kecil berdasarkan teks?",
+                pilihan: [
+                    "A. Kemampuan berkomunikasi dan bersosialisasi secara langsung dengan sesama bisa terganggu.",
+                    "B. Anak menjadi lebih pintar dalam bidang akademik sekolah.",
+                    "C. Hubungan anak dengan orang tua menjadi semakin erat.",
+                    "D. Anak memiliki banyak teman bermain di luar rumah."
+                ],
+                kunci: 0,
+                pembahasan: "Penurunan interaksi sosial langsung adalah dampak negatif logis dari penggunaan gawai berlebih."
+            },
+            {
+                id: 26,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Sebuah film dokumenter alam memperlihatkan keindahan bawah laut Raja Ampat dengan pengambilan gambar sinematik yang jernih, diiringi narasi edukatif yang menggugah kesadaran konservasi penonton.",
+                pertanyaan: "Unsur apa yang membuat film dokumenter tersebut dinilai berkualitas?",
+                pilihan: [
+                    "A. Visual sinematik yang jernih serta muatan edukasi konservasi yang kuat.",
+                    "B. Jalan cerita fiksi fiktif yang penuh kelucuan.",
+                    "C. Durasi film yang sangat singkat dan membosankan.",
+                    "D. Penggunaan efek suara ledakan buatan."
+                ],
+                kunci: 0,
+                pembahasan: "Kualitas dokumenter diukur dari keindahan visual (sinematik) dan nilai edukasi/pesan konservasinya."
+            },
+            {
+                id: 27,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Sumpah Pemuda yang diikrarkan pada tanggal 28 Oktober 1928 merupakan hasil keputusan Kongres Pemuda Kedua yang menegaskan cita-cita bertumpah darah satu, berbangsa satu, dan berbahasa satu, yaitu Indonesia.",
+                pertanyaan: "Kapan ikrar Sumpah Pemuda resmi dikumandangkan?",
+                pilihan: [
+                    "A. 17 Agustus 1945",
+                    "B. 28 Oktober 1928",
+                    "C. 20 Mei 1908",
+                    "D. 10 November 1945"
+                ],
+                kunci: 1,
+                pembahasan: "Teks secara tersurat menyebutkan tanggal 28 Oktober 1928."
+            },
+            {
+                id: 28,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Pemerintah daerah mulai membatasi izin pembangunan hotel baru di kawasan lindung air demi menjaga ketersediaan cadangan air bersih bagi warga jangka panjang.",
+                pertanyaan: "Apa prioritas utama yang dipertimbangkan oleh pemerintah daerah?",
+                pilihan: [
+                    "A. Keuntungan finansial pariwisata semata.",
+                    "B. Kelestarian lingkungan dan ketersediaan air bersih warga.",
+                    "C. Penambahan jumlah bangunan komersial di kawasan hijau.",
+                    "D. Penurunan jumlah wisatawan yang datang berkunjung."
+                ],
+                kunci: 1,
+                pembahasan: "Pembatasan izin demi menjaga cadangan air bersih menunjukkan prioritas pada kelestarian lingkungan dan kepentingan warga."
+            },
+            {
+                id: 29,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Puisi lama seperti gurindam umumnya terdiri atas dua baris dalam setiap bait dengan rima akhir a-a, serta berisi nasihat moral atau ajaran agama yang mendalam.",
+                pertanyaan: "Manakah karakteristik utama bentuk gurindam berdasarkan teks?",
+                pilihan: [
+                    "A. Terdiri dari dua baris per bait dengan rima a-a dan berisi nasihat.",
+                    "B. Memiliki empat baris dengan sampiran dan isi.",
+                    "C. Berbentuk cerita prosa panjang tanpa bait.",
+                    "D. Ditulis menggunakan bahasa asing modern."
+                ],
+                kunci: 0,
+                pembahasan: "Teks secara eksplisit mendefinisikan gurindam terdiri atas dua baris per bait berima a-a berisi nasihat."
+            },
+            {
+                id: 30,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Kecintaan terhadap produk lokal di tanah air perlahan mulai menunjukkan tren peningkatan seiring kreativitas pelaku UMKM dalam mendesain produk yang lebih kompetitif dan berkualitas.",
+                pertanyaan: "Faktor apa yang mendorong peningkatan kecintaan terhadap produk lokal?",
+                pilihan: [
+                    "A. Penurunan kualitas dan desain produk lokal.",
+                    "B. Peningkatan kreativitas serta kualitas produk yang ditawarkan UMKM.",
+                    "C. Kewajiban mutlak pemerintah melarang barang impor.",
+                    "D. Harga produk lokal yang jauh lebih mahal dari barang luar."
+                ],
+                kunci: 1,
+                pembahasan: "Teks menghubungkan tren peningkatan kecintaan produk lokal dengan kreativitas dan kualitas produk UMKM."
             }
         ];
 
         let indexSoalAktif = 0;
         let jawabanUser = Array(bankSoal.length).fill(null);
         let timerInterval;
-        let sisaDetik = 300; // Durasi total 5 menit (300 detik)
+        let sisaDetik = 2700; // Durasi total 30 soal adalah 45 menit (2700 detik)
 
         const welcomeScreen = document.getElementById("welcome-screen");
         const quizScreen = document.getElementById("quiz-screen");
@@ -215,7 +592,7 @@
 
         function pilihJawaban(indexOpsi) {
             jawabanUser[indexSoalAktif] = indexOpsi;
-            muatSoal(); // Refresh tampilan opsi terpilih
+            muatSoal(); 
         }
 
         function soalBerikutnya() {
@@ -225,6 +602,10 @@
             } else {
                 selesaikanUjian();
             }
+        }
+
+        function soalSesudahnya() {
+            // Placeholder
         }
 
         function soalSebelumnya() {
@@ -264,6 +645,13 @@
             document.getElementById("final-score").textContent = Math.round(skorTotal);
         }
 
+        function resetUjian() {
+            indexSoalAktif = 0;
+            jawabanUser = Array(bankSoal.length).fill(null);
+            sisaDetik = 2700;
+            resultScreen.classList.add("hidden");
+            welcomeScreen.classList.remove("hidden");
+        }
     </script>
 </body>
 </html>
