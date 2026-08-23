@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tryout TKA Bahasa Indonesia 2026</title>
+    <!-- Tailwind CSS CDN untuk Styling Modern -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="bg-indigo-600 text-white shadow-md py-4 px-6">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wide">TKA Bahasa Indonesia 2026</h1>
+            <div id="timer-box" class="hidden bg-indigo-700 px-3 py-1 rounded-lg text-sm font-semibold">
+                Sisa Waktu: <span id="time-left">05:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="max-w-4xl mx-auto p-4 md:p-6 w-full flex-grow">
+
+        <!-- HALAMAN SELAMAT DATANG (WELCOME SCREEN) -->
+        <div id="welcome-screen" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center max-w-xl mx-auto mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">Simulasi Ujian TKA Bahasa Indonesia</h2>
+            <p class="text-slate-600 mb-6 text-sm leading-relaxed">
+                Uji kemampuan membaca kritis, penalaran inferensial, dan evaluasi teks Anda sesuai standar kisi-kisi terbaru. Tes ini dilengkapi dengan batas waktu dan pembahasan otomatis.
+            </p>
+            <button onclick="mulaiUjian()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-md">
+                Mulai Ujian Sekarang
+            </button>
+        </div>
+
+        <!-- HALAMAN SOAL (QUIZ SCREEN) -->
+        <div id="quiz-screen" class="hidden space-y-6">
+            <!-- Progress & Info Soal -->
+            <div class="flex justify-between items-center bg-white px-6 py-3 rounded-xl border border-slate-200 shadow-sm text-sm font-medium">
+                <span id="question-number" class="text-indigo-600">Soal 1 dari 3</span>
+                <span id="category-badge" class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Pemahaman Inferensial</span>
+            </div>
+
+            <!-- Box Stimulus & Pertanyaan -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+                <!-- Stimulus Teks -->
+                <div class="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-sm md:text-base leading-relaxed italic" id="stimulus-text">
+                    Memuat stimulus teks...
+                </div>
+
+                <!-- Pertanyaan -->
+                <h3 class="text-lg font-semibold text-slate-900" id="question-text">
+                    Memuat pertanyaan...
+                </h3>
+
+                <!-- Pilihan Jawaban -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Opsi jawaban akan dimasukkan lewat JavaScript -->
+                </div>
+            </div>
+
+            <!-- Tombol Navigasi -->
+            <div class="flex justify-between">
+                <button id="btn-prev" onclick="soalSebelumnya()" class="hidden bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium px-6 py-2.5 rounded-xl transition">
+                    Sebelumnya
+                </button>
+                <div class="ml-auto">
+                    <button id="btn-next" onclick="soalBerikutnya()" disabled class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium px-6 py-2.5 rounded-xl transition shadow-sm">
+                        Selanjutnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN HASIL (RESULT SCREEN) -->
+        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-2xl mx-auto mt-6 space-y-6">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-slate-900 mb-1">Hasil Simulasi TKA Anda</h2>
+                <p class="text-slate-500 text-sm">Evaluasi lengkap pencapaian ujian Anda</p>
+                <div class="my-6 inline-block bg-indigo-50 border border-indigo-100 px-8 py-4 rounded-2xl">
+                    <span class="block text-xs text-indigo-600 font-semibold uppercase tracking-wider">Skor Akhir</span>
+                    <span id="final-score" class="text-4xl font-extrabold text-indigo-600">0</span>
+                </div>
+            </div>
+
+            <!-- Detail Pembahasan Per Soal -->
+            <div>
+                <h3 class="font-bold text-slate-900 mb-3 text-base">Pembahasan & Evaluasi Jawaban</h3>
+                <div id="review-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                    <!-- Diisi lewat JavaScript -->
+                </div>
+            </div>
+
+            <button onclick="resetUjian()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-xl transition shadow-md">
+                Ulangi Simulasi
+            </button>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-6 text-xs text-slate-400">
+        &copy; 2026 Modul Simulasi Akademik • TKA Bahasa Indonesia
+    </footer>
+
+    <!-- SCRIPT LOGIKA APLIKASI -->
+    <script>
+        // Database Bank Soal TKA Bahasa Indonesia
+        const bankSoal = [
+            {
+                id: 1,
+                kategori: "Pemahaman Inferensial",
+                stimulus: "Pembangunan infrastruktur jalan tol trans-wilayah sering kali memicu perdebatan. Di satu sisi, akses logistik menjadi jauh lebih cepat dan memangkas biaya distribusi. Namun, di sisi lain, alih fungsi lahan hijau yang masif mengancam daerah resapan air di sekitarnya.",
+                pertanyaan: "Manakah simpulan yang paling akurat berdasarkan teks di atas?",
+                pilihan: [
+                    "A. Pembangunan jalan tol sepenuhnya merugikan masyarakat.",
+                    "B. Percepatan logistik harus dibayar dengan potensi ancaman lingkungan.",
+                    "C. Alih fungsi lahan hijau tidak berdampak pada resapan air.",
+                    "D. Pemerintah wajib menghentikan seluruh proyek jalan tol."
+                ],
+                kunci: 1, // Indeks pilihan B (0=A, 1=B, dst)
+                pembahasan: "Simpulan mencakup dua sisi teks secara objektif: keuntungan percepatan logistik dan risiko ancaman lingkungan."
+            },
+            {
+                id: 2,
+                kategori: "Evaluasi dan Apresiasi",
+                stimulus: "Pemerintah kota meluncurkan program 'Satu Rumah Satu Tanaman Produktif' untuk menekan pengeluaran pangan rumah tangga sekaligus memperindah kawasan pemukiman padat penduduk. Sejak dicanangkan bulan lalu, warga RW 04 berhasil memanen ratusan kilogram cabai dan tomat segar dari pekarangan sempit mereka.",
+                pertanyaan: "Apakah asumsi yang mendasari efektivitas program tersebut?",
+                pilihan: [
+                    "A. Pekarangan sempit di perkotaan tidak bisa dimanfaatkan sama sekali.",
+                    "B. Tanaman produktif di pekarangan rumah mampu memberikan hasil nyata bagi kebutuhan pangan warga.",
+                    "C. Seluruh warga kota wajib menjual hasil panen ke pasar tradisional.",
+                    "D. Program ini hanya berfokus pada keindahan estetika pemukiman tanpa fungsi ekonomi."
+                ],
+                kunci: 1, // Pilihan B
+                pembahasan: "Program ini berasumsi bahwa pemanfaatan pekarangan sempit dapat menghasilkan tanaman produktif yang berdampak langsung pada kebutuhan rumah tangga."
+            },
+            {
+                id: 3,
+                kategori: "Pemahaman Tekstual",
+                stimulus: "Pemanfaatan kecerdasan buatan (AI) di sektor pendidikan menuntut adaptasi kurikulum yang cepat. Guru tidak lagi berperan sebagai satu-satunya sumber informasi tunggal di ruang kelas, melainkan bertransformasi menjadi fasilitator dan pengarah moral bagi peserta didik.",
+                pertanyaan: "Berdasarkan paragraf di atas, bagaimanakah pergeseran peran guru akibat kehadiran kecerdasan buatan?",
+                pilihan: [
+                    "A. Guru digantikan sepenuhnya oleh sistem kecerdasan buatan.",
+                    "B. Guru bertransformasi dari sumber informasi tunggal menjadi fasilitator dan pengarah moral.",
+                    "C. Guru tetap menjadi satu-satunya sumber ilmu pengetahuan utama.",
+                    "D. Peran guru di dalam kelas ditiadakan dalam sistem pendidikan modern."
+                ],
+                kunci: 1, // Pilihan B
+                pembahasan: "Teks secara tersurat menyatakan bahwa guru bertransformasi menjadi fasilitator dan pengarah moral, bukan lagi sumber informasi tunggal."
+            }
+        ];
+
+        let indexSoalAktif = 0;
+        let jawabanUser = Array(bankSoal.length).fill(null);
+        let timerInterval;
+        let sisaDetik = 300; // Durasi total 5 menit (300 detik)
+
+        const welcomeScreen = document.getElementById("welcome-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const resultScreen = document.getElementById("result-screen");
+        
+        function mulaiUjian() {
+            welcomeScreen.classList.add("hidden");
+            quizScreen.classList.remove("hidden");
+            document.getElementById("timer-box").classList.remove("hidden");
+            mulaiTimer();
+            muatSoal();
+        }
+
+        function mulaiTimer() {
+            timerInterval = setInterval(() => {
+                if (sisaDetik <= 0) {
+                    clearInterval(timerInterval);
+                    selesaikanUjian();
+                } else {
+                    sisaDetik--;
+                    let menit = Math.floor(sisaDetik / 60);
+                    let detik = sisaDetik % 60;
+                    document.getElementById("time-left").textContent = 
+                        `${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function muatSoal() {
+            const soal = bankSoal[indexSoalAktif];
+            document.getElementById("question-number").textContent = `Soal ${indexSoalAktif + 1} dari ${bankSoal.length}`;
+            document.getElementById("category-badge").textContent = soal.kategori;
+            document.getElementById("stimulus-text").textContent = soal.stimulus;
+            document.getElementById("question-text").textContent = soal.pertanyaan;
+
+            const opsiContainer = document.getElementById("options-container");
+            opsiContainer.innerHTML = "";
+
+            soal.pilihan.forEach((opsi, index) => {
+                const isSelected = jawabanUser[indexSoalAktif] === index;
+                const button = document.createElement("button");
+                button.className = `w-full text-left p-4 rounded-xl border transition text-sm md:text-base flex items-center space-x-3 ${
+                    isSelected 
+                        ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-medium shadow-sm' 
+                        : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                }`;
+                button.innerHTML = `<span class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300 text-slate-500'}">${String.fromCharCode(65 + index)}</span><span>${opsi.substring(3)}</span>`;
+                button.onclick = () => pilihJawaban(index);
+                opsiContainer.appendChild(button);
+            });
+
+            // Atur tombol navigasi
+            document.getElementById("btn-prev").classList.toggle("hidden", indexSoalAktif === 0);
+            const btnNext = document.getElementById("btn-next");
+            btnNext.disabled = jawabanUser[indexSoalAktif] === null;
+            btnNext.textContent = indexSoalAktif === bankSoal.length - 1 ? "Selesai & Kumpulkan" : "Selanjutnya";
+        }
+
+        function pilihJawaban(indexOpsi) {
+            jawabanUser[indexSoalAktif] = indexOpsi;
+            muatSoal(); // Refresh tampilan opsi terpilih
+        }
+
+        function soalBerikutnya() {
+            if (indexSoalAktif < bankSoal.length - 1) {
+                indexSoalAktif++;
+                muatSoal();
+            } else {
+                selesaikanUjian();
+            }
+        }
+
+        function soalSebelumnya() {
+            if (indexSoalAktif > 0) {
+                indexSoalAktif--;
+                muatSoal();
+            }
+        }
+
+        function selesaikanUjian() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add("hidden");
+            document.getElementById("timer-box").classList.add("hidden");
+            resultScreen.classList.remove("hidden");
+
+            // Hitung Skor
+            let skorTotal = 0;
+            const reviewContainer = document.getElementById("review-container");
+            reviewContainer.innerHTML = "";
+
+            bankSoal.forEach((soal, idx) => {
+                const jawabanUserIdx = jawabanUser[idx];
+                const isBenar = jawabanUserIdx === soal.kunci;
+                if (isBenar) skorTotal += (100 / bankSoal.length);
+
+                const reviewItem = document.createElement("div");
+                reviewItem.className = `p-4 rounded-xl border text-sm ${isBenar ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/35'}`;
+                reviewItem.innerHTML = `
+                    <div class="font-semibold text-slate-900 mb-1">Soal ${idx + 1}: ${soal.pertanyaan}</div>
+                    <div class="text-xs mb-1">Jawaban Anda: <span class="${isBenar ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}">${jawabanUserIdx !== null ? soal.pilihan[jawabanUserIdx] : 'Tidak dijawab'}</span></div>
+                    <div class="text-xs mb-2 text-slate-600">Kunci Jawaban: <span class="font-bold text-slate-800">${soal.pilihan[soal.kunci]}</span></div>
+                    <div class="text-xs text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100"><strong>Pembahasan:</strong> ${soal.pembahasan}</div>
+                `;
+                reviewContainer.appendChild(reviewItem);
+            });
+
+            document.getElementById("final-score").textContent = Math.round(skorTotal);
+        }
+
+        function resetUjian() {
+            indexSoalAktif = 0;
+            jawabanUser = Array(bankSoal.length).fill(null);
+            sisaDetik = 300;
+            resultScreen.classList.add("hidden");
+            welcomeScreen.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
