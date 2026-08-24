@@ -3,499 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tryout TKA Bahasa Indonesia 2026 - Live Leaderboard</title>
+    <title>Uji Kompetensi Akademik (TKA) SMK Profesional</title>
+    <!-- Google Fonts & Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
-
-    <!-- HEADER -->
-    <header class="bg-indigo-600 text-white shadow-md py-4 px-6">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-wide">TKA Bahasa Indonesia 2026</h1>
-            <div id="timer-box" class="hidden bg-indigo-700 px-3 py-1 rounded-lg text-sm font-semibold">
-                Sisa Waktu: <span id="time-left">45:00</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- KONTEN UTAMA -->
-    <main class="max-w-4xl mx-auto p-4 md:p-6 w-full flex-grow">
-
-        <!-- HALAMAN SELAMAT DATANG (INPUT NAMA) -->
-        <div id="welcome-screen" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center max-w-xl mx-auto mt-10">
-            <h2 class="text-2xl font-bold text-slate-900 mb-3">Simulasi Ujian TKA Bahasa Indonesia</h2>
-            <p class="text-slate-600 mb-4 text-sm leading-relaxed">
-                Masukkan nama lengkap Anda sebelum memulai ujian 30 soal. Hasil skor Anda nanti akan otomatis terekam dan bisa dilihat bersama.
-            </p>
-            <input type="text" id="nama-peserta" placeholder="Ketik Nama Lengkap Anda..." class="w-full px-4 py-3 border border-slate-300 rounded-xl mb-4 text-sm focus:outline-none focus:border-indigo-600 text-center font-medium">
-            <button onclick="mulaiUjianCustom()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-md">
-                Mulai Ujian Sekarang
-            </button>
-        </div>
-
-        <!-- HALAMAN SOAL (QUIZ SCREEN) -->
-        <div id="quiz-screen" class="hidden space-y-6">
-            <div class="flex justify-between items-center bg-white px-6 py-3 rounded-xl border border-slate-200 shadow-sm text-sm font-medium">
-                <span id="question-number" class="text-indigo-600">Soal 1 dari 30</span>
-                <span id="category-badge" class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Kategori</span>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
-                <div class="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-sm md:text-base leading-relaxed italic" id="stimulus-text">
-                    Memuat stimulus teks...
-                </div>
-                <h3 class="text-lg font-semibold text-slate-900" id="question-text">
-                    Memuat pertanyaan...
-                </h3>
-                <div id="options-container" class="space-y-3"></div>
-            </div>
-
-            <div class="flex justify-between">
-                <button id="btn-prev" onclick="soalSebelumnya()" class="hidden bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium px-6 py-2.5 rounded-xl transition">
-                    Sebelumnya
-                </button>
-                <div class="ml-auto">
-                    <button id="btn-next" onclick="soalBerikutnya()" disabled class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium px-6 py-2.5 rounded-xl transition shadow-sm">
-                        Selanjutnya
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- HALAMAN HASIL & PAPAN NILAI (RESULT SCREEN) -->
-        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-2xl mx-auto mt-6 space-y-6">
-            <div class="text-center">
-                <h2 class="text-2xl font-bold text-slate-900 mb-1">Hasil Simulasi TKA Anda</h2>
-                <p id="sapaan-peserta" class="text-slate-500 text-sm font-medium">Peserta: -</p>
-                <div class="my-6 inline-block bg-indigo-50 border border-indigo-100 px-8 py-4 rounded-2xl">
-                    <span class="block text-xs text-indigo-600 font-semibold uppercase tracking-wider">Skor Akhir Anda</span>
-                    <span id="final-score" class="text-4xl font-extrabold text-indigo-600">0</span>
-                </div>
-            </div>
-
-            <!-- TABEL NILAI PESERTA LAIN (LEADERBOARD) -->
-            <div class="border-t border-slate-200 pt-6">
-                <h3 class="font-bold text-slate-900 mb-3 text-base flex justify-between items-center">
-                    <span>Papan Nilai Peserta Lain</span>
-                    <button onclick="muatLeaderboard()" class="text-xs text-indigo-600 hover:underline font-normal">Muat Ulang Nilai</button>
-                </h3>
-                <div class="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden max-h-60 overflow-y-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead class="bg-slate-100 text-slate-700 uppercase text-xs tracking-wider">
-                            <tr>
-                                <th class="p-3">Nama Peserta</th>
-                                <th class="p-3 text-right">Skor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body" class="divide-y divide-slate-200 text-slate-600">
-                            <tr><td colspan="2" class="p-4 text-center text-xs">Memuat daftar nilai...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Detail Pembahasan Per Soal -->
-            <div class="border-t border-slate-200 pt-6">
-                <h3 class="font-bold text-slate-900 mb-3 text-base">Pembahasan & Evaluasi Jawaban</h3>
-                <div id="review-container" class="space-y-4 max-h-80 overflow-y-auto pr-2"></div>
-            </div>
-
-            <button onclick="resetUjian()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-xl transition shadow-md">
-                Ulangi Simulasi
-            </button>
-        </div>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="text-center py-6 text-xs text-slate-400">
-        &copy; 2026 Modul Simulasi Akademik • TKA Bahasa Indonesia
-    </footer>
-
-    <!-- SCRIPT APLIKASI -->
     <script>
-        const API_URL = "https://sheetdb.io/api/v1/xgqfzrs7vsvxa";
-
-        let namaSiswa = "";
-        const bankSoal = [
-            {
-                id: 1, kategori: "Pemahaman Inferensial",
-                stimulus: "Pembangunan infrastruktur jalan tol trans-wilayah sering kali memicu perdebatan. Di satu sisi, akses logistik menjadi jauh lebih cepat dan memangkas biaya distribusi. Namun, di sisi lain, alih fungsi lahan hijau yang masif mengancam daerah resapan air di sekitarnya.",
-                pertanyaan: "Manakah simpulan yang paling akurat berdasarkan teks di atas?",
-                pilihan: ["A. Pembangunan jalan tol sepenuhnya merugikan masyarakat.", "B. Percepatan logistik harus dibayar dengan potensi ancaman lingkungan.", "C. Alih fungsi lahan hijau tidak berdampak pada resapan air.", "D. Pemerintah wajib menghentikan seluruh proyek jalan tol."],
-                kunci: 1, pembahasan: "Simpulan mencakup dua sisi teks secara objektif: keuntungan percepatan logistik dan risiko ancaman lingkungan."
-            },
-            {
-                id: 2, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Pemerintah kota meluncurkan program 'Satu Rumah Satu Tanaman Produktif' untuk menekan pengeluaran pangan rumah tangga sekaligus memperindah kawasan pemukiman padat penduduk. Sejak dicanangkan bulan lalu, warga RW 04 berhasil memanen ratusan kilogram cabai dan tomat segar dari pekarangan sempit mereka.",
-                pertanyaan: "Apakah asumsi yang mendasari efektivitas program tersebut?",
-                pilihan: ["A. Pekarangan sempit di perkotaan tidak bisa dimanfaatkan sama sekali.", "B. Tanaman produktif di pekarangan rumah mampu memberikan hasil nyata bagi kebutuhan pangan warga.", "C. Seluruh warga kota wajib menjual hasil panen ke pasar tradisional.", "D. Program ini hanya berfokus pada keindahan estetika pemukiman tanpa fungsi ekonomi."],
-                kunci: 1, pembahasan: "Program ini berasumsi bahwa pemanfaatan pekarangan sempit dapat menghasilkan tanaman produktif yang berdampak langsung pada kebutuhan rumah tangga."
-            },
-            {
-                id: 3, kategori: "Pemahaman Tekstual",
-                stimulus: "Pemanfaatan kecerdasan buatan (AI) di sektor pendidikan menuntut adaptasi kurikulum yang cepat. Guru tidak lagi berperan sebagai satu-satunya sumber informasi tunggal di ruang kelas, melainkan bertransformasi menjadi fasilitator dan pengarah moral bagi peserta didik.",
-                pertanyaan: "Berdasarkan paragraf di atas, bagaimanakah pergeseran peran guru akibat kehadiran kecerdasan buatan?",
-                pilihan: ["A. Guru digantikan sepenuhnya oleh sistem kecerdasan buatan.", "B. Guru bertransformasi dari sumber informasi tunggal menjadi fasilitator dan pengarah moral.", "C. Guru tetap menjadi satu-satunya sumber ilmu pengetahuan utama.", "D. Peran guru di dalam kelas ditiadakan dalam sistem pendidikan modern."],
-                kunci: 1, pembahasan: "Teks secara tersurat menyatakan bahwa guru bertransformasi menjadi fasilitator dan pengarah moral, bukan lagi sumber informasi tunggal."
-            },
-            {
-                id: 4, kategori: "Pemahaman Inferensial",
-                stimulus: "Kebiasaan membaca buku fisik di kalangan generasi muda dikabarkan menurun drastis seiring maraknya platform video pendek. Padahal, membaca buku secara mendalam terbukti melatih rentang perhatian (attention span) dan kemampuan berpikir analitis yang lebih baik.",
-                pertanyaan: "Implikasi apa yang paling mungkin terjadi jika tren penurunan membaca buku terus berlanjut?",
-                pilihan: ["A. Generasi muda akan semakin mahir dalam melakukan analisis mendalam.", "B. Kemampuan berpikir analitis dan rentang perhatian anak muda berpotensi melemah.", "C. Platform video pendek akan gulung tikar dalam waktu dekat.", "D. Buku fisik akan mengalami kelangkaan bahan baku kertas."],
-                kunci: 1, pembahasan: "Implikasi logis dari hilangnya kebiasaan membaca mendalam adalah penurunan kemampuan analitis dan rentang perhatian."
-            },
-            {
-                id: 5, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Dalam sebuah artikel kesehatan disebutkan bahwa mengonsumsi suplemen vitamin C dosis tinggi setiap hari dapat menyembuhkan segala jenis penyakit flu dalam waktu satu jam tanpa efek samping apa pun.",
-                pertanyaan: "Manakah penilaian yang paling objektif terhadap klaim dalam artikel tersebut?",
-                pilihan: ["A. Klaim tersebut sepenuhnya benar karena vitamin C sangat baik untuk tubuh.", "B. Klaim tersebut berlebihan dan tidak didukung oleh bukti medis yang kredibel.", "C. Artikel tersebut wajib disebarluaskan kepada seluruh masyarakat.", "D. Suplemen vitamin C adalah obat terlarang yang berbahaya."],
-                kunci: 1, pembahasan: "Klaim menyembuhkan 'segala jenis flu dalam satu jam tanpa efek samping' adalah klaim pseudosains yang berlebihan."
-            },
-            {
-                id: 6, kategori: "Pemahaman Tekstual",
-                stimulus: "Museum Bahari di Jakarta Utara menyimpan berbagai koleksi yang berkaitan dengan sejarah kebaharian bangsa Indonesia, mulai dari perahu tradisional hingga meriam kuno peninggalan VOC.",
-                pertanyaan: "Berdasarkan teks di atas, koleksi apa saja yang dapat ditemukan di Museum Bahari?",
-                pilihan: ["A. Pesawat terbang purba dan fosil dinosaurus.", "B. Perahu tradisional dan meriam kuno peninggalan VOC.", "C. Kain tenun tradisional dari berbagai daerah.", "D. Lukisan modern karya pelukis ternama dunia."],
-                kunci: 1, pembahasan: "Informasi tersurat menyatakan koleksi museum mencakup perahu tradisional dan meriam kuno VOC."
-            },
-            {
-                id: 7, kategori: "Pemahaman Inferensial",
-                stimulus: "Meskipun harga cabai di pasaran melonjak hingga dua kali lipat menjelang hari raya, para pedagang kuliner skala kecil tetap harus bertahan dengan tidak menaikkan harga porsi makanan agar pelanggan tidak lari.",
-                pertanyaan: "Apa dampak langsung yang dialami oleh pedagang kuliner kecil berdasarkan situasi tersebut?",
-                pilihan: ["A. Keuntungan atau margin laba mereka mengalami penurunan.", "B. Jumlah pembeli meningkat secara drastis.", "C. Modal usaha mereka bertambah besar.", "D. Harga cabai di pasaran berangsur-angsur turun."],
-                kunci: 0, pembahasan: "Harga bahan baku naik tetapi harga jual tetap, otomatis margin keuntungan pedagang akan menyusut."
-            },
-            {
-                id: 8, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Sebuah surat kabar lokal memberitakan bahwa tingkat kemacetan di ibu kota berhasil turun 50% setelah diterapkannya sistem ganjil-genap di seluruh ruas jalan utama.",
-                pertanyaan: "Manakah informasi tambahan yang paling diperlukan untuk memverifikasi keakuratan berita tersebut?",
-                pilihan: ["A. Data jumlah volume kendaraan harian sebelum dan sesudah kebijakan diterapkan.", "B. Harga bahan bakar minyak di SPBU terdekat.", "C. Jadwal libur nasional pada tahun tersebut.", "D. Jumlah penduduk yang menggunakan kendaraan roda dua."],
-                kunci: 0, pembahasan: "Untuk membuktikan klaim penurunan kemacetan, diperlukan data pembanding volume kendaraan riil di lapangan."
-            },
-            {
-                id: 9, kategori: "Pemahaman Tekstual",
-                stimulus: "Sistem irigasi Subak di Bali tidak hanya berfungsi sebagai pengatur air sawah secara teknis, tetapi juga merefleksikan filosofi hidup masyarakat Bali yang menjunjung tinggi keharmonisan alam dan sesama manusia (Tri Hita Karana).",
-                pertanyaan: "Apakah fungsi utama sistem Subak di Bali menurut teks?",
-                pilihan: ["A. Tempat wisata air terbesar di Asia Tenggara.", "B. Pengatur air sawah sekaligus cerminan filosofi keharmonisan.", "C. Sistem pertahanan militer tradisional kerajaan Bali.", "D. Waduk buatan modern untuk Pembangkit Listrik Tenaga Air."],
-                kunci: 1, pembahasan: "Teks menjelaskan Subak berfungsi sebagai pengatur air sawah sekaligus merefleksikan filosofi keharmonisan."
-            },
-            {
-                id: 10, kategori: "Pemahaman Inferensial",
-                stimulus: "Penyu hijau merupakan salah satu hewan dilindungi karena populasinya yang terus terancam oleh perburuan liar dan kerusakan habitat pesisir pantai tempat mereka bertelur.",
-                pertanyaan: "Apa kesimpulan utama yang dapat diambil mengenai kondisi penyu hijau saat ini?",
-                pilihan: ["A. Populasinya aman dan jumlahnya melimpah di setiap pantai.", "B. Hewan tersebut berada dalam status terancam punah akibat ulah manusia.", "C. Penyu hijau sudah tidak pernah terlihat lagi di habitat alaminya.", "D. Perburuan liar tidak berpengaruh pada kelangsungan hidup penyu."],
-                kunci: 1, pembahasan: "Ancaman perburuan liar dan kerusakan habitat menyimpulkan bahwa hewan ini berada dalam status konservasi yang terancam."
-            },
-            {
-                id: 11, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Novel sejarah karya Pramoedya Ananta Toer sering kali mengangkat latar perjuangan pergerakan nasional dengan gaya bahasa yang tajam, kaya emosi, dan sarat kritik sosial terhadap kolonialisme.",
-                pertanyaan: "Unsur apa yang paling dominan dievaluasi dari karya sastra dalam teks tersebut?",
-                pilihan: ["A. Kelengkapan rumus fisika di dalamnya.", "B. Karakteristik gaya bahasa dan muatan kritik sosial.", "C. Ketepatan data statistik keuangan masa lampau.", "D. Desain sampul dan jumlah halaman buku."],
-                kunci: 1, pembahasan: "Teks menyoroti gaya bahasa yang tajam dan sarat kritik sosial, yang merupakan unsur intrinsik/ekstrinsik sastra."
-            },
-            {
-                id: 12, kategori: "Pemahaman Tekstual",
-                stimulus: "Berdasarkan laporan cuaca BMKG, wilayah pesisir selatan Jawa diperkirakan akan mengalami gelombang tinggi hingga mencapai 4 meter dalam tiga hari ke depan akibat hembusan angin kencang dari Samudra Hindia.",
-                pertanyaan: "Berapa perkiraan ketinggian gelombang maksimum di pesisir selatan Jawa?",
-                pilihan: ["A. 1 meter", "B. 2 meter", "C. 3 meter", "D. 4 meter"],
-                kunci: 3, pembahasan: "Teks secara tersurat menyebutkan gelombang tinggi hingga mencapai 4 meter."
-            },
-            {
-                id: 13, kategori: "Pemahaman Inferensial",
-                stimulus: "Peningkatan penggunaan kendaraan listrik secara masif diprediksi mampu menekan emisi karbon di perkotaan secara signifikan, meskipun tantangan penyediaan infrastruktur stasiun pengisian daya masih menjadi pekerjaan rumah utama.",
-                pertanyaan: "Apa makna tersirat mengenai kesiapan adopsi kendaraan listrik saat ini?",
-                pilihan: ["A. Infrastruktur pendukungnya sudah sangat sempurna di seluruh pelosok.", "B. Potensi positifnya besar, namun masih terkendala fasilitas pengisian daya.", "C. Kendaraan listrik tidak memberikan pengaruh apa pun terhadap lingkungan.", "D. Pemerintah melarang penggunaan kendaraan berbasis bahan bakar fosil."],
-                kunci: 1, pembahasan: "Frasa 'tantangan penyediaan infrastruktur... masih menjadi pekerjaan rumah' menyiratkan adanya kendala fasilitas."
-            },
-            {
-                id: 14, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Sebuah iklan produk pembersih lantai mengklaim bahwa cairan produknya mampu membunuh 100% kuman berbahaya di lantai rumah hanya dalam satu kali usapan lembut.",
-                pertanyaan: "Manakah kritik yang paling logis terhadap klaim iklan tersebut?",
-                pilihan: ["A. Angka 100% mutlak terbukti secara ilmiah tanpa pengecualian.", "B. Dalam dunia mikrobiologi, klaim efektivitas 100% mutlak sangat jarang realistis dan biasanya bersifat hiperbola iklan.", "C. Produk pembersih lantai memang dirancang untuk merusak lantai.", "D. Kuman di rumah tidak pernah bisa dibersihkan dengan cairan apa pun."],
-                kunci: 1, pembahasan: "Klaim absolut 100% dalam dunia sains/produk pembersih umumnya merupakan gaya bahasa hiperbola pemasaran."
-            },
-            {
-                id: 15, kategori: "Pemahaman Tekstual",
-                stimulus: "Batik tulis tradisional melalui proses pembuatan yang panjang menggunakan canting dan malam (lilin khusus), di mana setiap corak digambar secara manual oleh perajin dengan tingkat ketelitian tinggi.",
-                pertanyaan: "Alat apa yang digunakan untuk menggoreskan malam pada proses pembuatan batik tulis?",
-                pilihan: ["A. Kuas cat tembok", "B. Canting", "C. Stempel tembaga", "D. Mesin cetak digital"],
-                kunci: 1, pembahasan: "Secara tersurat disebutkan bahwa batik tulis menggunakan canting dan malam."
-            },
-            {
-                id: 16, kategori: "Pemahaman Inferensial",
-                stimulus: "Penerapan sistem kerja jarak jauh (remote working) membuat banyak perusahaan menyadari bahwa produktivitas karyawan tidak harus diukur dari kehadiran fisik di kantor setiap hari.",
-                pertanyaan: "Bagaimanakah pergeseran pandangan perusahaan terhadap produktivitas kerja?",
-                pilihan: ["A. Produktivitas kini dinilai dari hasil kerja nyata, bukan sekadar absensi fisik.", "B. Perusahaan mewajibkan seluruh karyawan tidur di kantor.", "C. Kehadiran fisik di kantor menjadi satu-satunya indikator kesuksesan.", "D. Pekerja jarak jauh terbukti memiliki kinerja yang buruk."],
-                kunci: 0, pembahasan: "Kesimpulan logis dari teks adalah penilaian kinerja bergeser dari kehadiran fisik ke pencapaian hasil kerja."
-            },
-            {
-                id: 17, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Pementasan teater pelajar sekolah menengah kemarin dinilai sukses besar karena penonton terhanyut dalam emosi cerita, meskipun tata panggung sempat mengalami sedikit gangguan teknis lampu di awal babak pertama.",
-                pertanyaan: "Bagaimanakah penilaian menyeluruh terhadap pementasan teater tersebut?",
-                pilihan: ["A. Gagal total karena ada gangguan teknis.", "B. Sukses secara emosional meskipun ada sedikit kendala teknis awal.", "C. Tidak menarik sama sekali bagi penonton.", "D. Sempurna tanpa ada cacat sedikit pun."],
-                kunci: 1, pembahasan: "Teks menyatakan sukses besar karena penonton terhanyut, dengan catatan ada sedikit gangguan lampu di awal."
-            },
-            {
-                id: 18, kategori: "Pemahaman Tekstual",
-                stimulus: "Rempah-rempah nusantara seperti lada, pala, dan cengkih menjadi komoditas utama yang menarik bangsa-bangsa Eropa datang berlayar ke Nusantara pada abad ke-16.",
-                pertanyaan: "Komoditas apa yang menjadi daya tarik utama bangsa Eropa datang ke Nusantara?",
-                pilihan: ["A. Kendaraan bermotor", "B. Rempah-rempah", "C. Perangkat elektronik", "D. Tekstil modern"],
-                kunci: 1, pembahasan: "Informasi tersurat menyatakan rempah-rempah nusantara adalah daya tarik utama pelayaran bangsa Eropa."
-            },
-            {
-                id: 19, kategori: "Pemahaman Inferensial",
-                stimulus: "Penggunaan kantong plastik sekali pakai di pusat perbelanjaan modern kini mulai banyak ditinggalkan dan digantikan oleh tas belanja ramah lingkungan yang dapat digunakan berulang kali.",
-                pertanyaan: "Apa tujuan utama dari perubahan kebiasaan tersebut?",
-                pilihan: ["A. Meningkatkan pengeluaran belanja konsumen setiap hari.", "B. Mengurangi volume sampah plastik yang mencemari lingkungan.", "C. Menambah jumlah produksi kantong plastik di pabrik.", "D. Mempersulit masyarakat saat berbelanja."],
-                kunci: 1, pembahasan: "Penggantian plastik sekali pakai dengan tas ramah lingkungan bertujuan untuk mengurangi limbah sampah plastik."
-            },
-            {
-                id: 20, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Sebuah buku panduan bercocok tanam memberikan langkah-langkah yang runtut mulai dari pemilihan bibit, penyemaian, perawatan, hingga teknik pemupukan organik yang mudah dipahami oleh pemula.",
-                pertanyaan: "Manakah pujian yang paling tepat untuk buku panduan tersebut?",
-                pilihan: ["A. Buku tersebut sangat komunikatif dan aplikatif bagi pemula.", "B. Buku tersebut membosankan dan terlalu rumit dibaca.", "C. Buku tersebut berisi dongeng fiksi fiktif belaka.", "D. Buku tersebut sama sekali tidak berguna bagi petani."],
-                kunci: 0, pembahasan: "Langkah runtut dan mudah dipahami oleh pemula menunjukkan buku tersebut komunikatif dan aplikatif."
-            },
-            {
-                id: 21, kategori: "Pemahaman Tekstual",
-                stimulus: "Komodo (Varanus komodoensis) adalah spesies kadal raksasa endemik yang hanya dapat ditemukan di beberapa pulau di Nusa Tenggara Timur, seperti Pulau Komodo dan Rinca.",
-                pertanyaan: "Di wilayah manakah komodo dapat ditemukan secara alami?",
-                pilihan: ["A. Pulau Sumatera dan Kalimantan", "B. Pulau Komodo dan Rinca di Nusa Tenggara Timur", "C. Pulau Jawa bagian selatan", "D. Kepulauan Maluku Utara"],
-                kunci: 1, pembahasan: "Teks secara tersurat menyebutkan habitat asli komodo di Pulau Komodo dan Rinca, NTT."
-            },
-            {
-                id: 22, kategori: "Pemahaman Inferensial",
-                stimulus: "Meskipun fasilitas perpustakaan sekolah telah direnovasi menjadi jauh lebih modern dan nyaman, tingkat kunjungan siswa untuk membaca buku di dalam ruangan masih tergolong rendah.",
-                pertanyaan: "Apa simpulan logis dari kondisi perpustakaan tersebut?",
-                pilihan: ["A. Renovasi fisik saja belum tentu otomatis mengubah minat baca siswa secara instan.", "B. Siswa dilarang keras memasuki area perpustakaan modern.", "C. Buku-buku yang disediakan di perpustakaan jumlahnya sangat banyak.", "D. Fasilitas modern membuat siswa malas belajar."],
-                kunci: 0, pembahasan: "Fasilitas bagus (renovasi) belum tentu berbanding lurus dengan tingginya minat kunjungan jika motivasi literasi belum terbentuk."
-            },
-            {
-                id: 23, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Penyanyi muda itu membawakan lagu daerah dengan aransemen musik jazz kontemporer, memadukan unsur tradisional dan modern secara harmonis tanpa menghilangkan esensi aslinya.",
-                pertanyaan: "Bagaimanakah bentuk apresiasi yang tepat terhadap karya musik tersebut?",
-                pilihan: ["A. Inovasi yang patut diapresiasi karena berhasil menjembatani musik tradisional dan modern.", "B. Perusakan total terhadap warisan budaya leluhur bangsa.", "C. Tindakan plagiarisme yang melanggar hak cipta lagu daerah.", "D. Musik yang sama sekali tidak enak didengar."],
-                kunci: 0, pembahasan: "Memadukan unsur tradisional dan modern secara harmonis tanpa merusak esensi adalah bentuk inovasi positif."
-            },
-            {
-                id: 24, kategori: "Pemahaman Tekstual",
-                stimulus: "Sistem tanam paksa (cultuurstelsel) yang diterapkan oleh Gubernur Jenderal Johannes van den Bosch pada masa kolonial Belanda mewajibkan petani menyisihkan sebagian tanahnya untuk ditanami tanaman ekspor.",
-                pertanyaan: "Siapakah tokoh yang menerapkan sistem tanam paksa di Indonesia?",
-                pilihan: ["A. Herman Willem Daendels", "B. Thomas Stamford Raffles", "C. Johannes van den Bosch", "D. Jan Pieterszoon Coen"],
-                kunci: 2, pembahasan: "Informasi tersurat menyebutkan nama Johannes van den Bosch sebagai penggagas sistem tanam paksa."
-            },
-            {
-                id: 25, kategori: "Pemahaman Inferensial",
-                stimulus: "Penggunaan gawai yang berlebihan pada anak-anak usia dini sering kali dikaitkan dengan penurunan kemampuan interaksi sosial secara langsung dengan teman sebaya.",
-                pertanyaan: "Apa akibat tidak langsung dari kecanduan gawai pada anak kecil berdasarkan teks?",
-                pilihan: ["A. Kemampuan berkomunikasi dan bersosialisasi secara langsung dengan sesama bisa terganggu.", "B. Anak menjadi lebih pintar dalam bidang akademik sekolah.", "C. Hubungan anak dengan orang tua menjadi semakin erat.", "D. Anak memiliki banyak teman bermain di luar rumah."],
-                kunci: 0, pembahasan: "Penurunan interaksi sosial langsung adalah dampak negatif logis dari penggunaan gawai berlebih."
-            },
-            {
-                id: 26, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Sebuah film dokumenter alam memperlihatkan keindahan bawah laut Raja Ampat dengan pengambilan gambar sinematik yang jernih, diiringi narasi edukatif yang menggugah kesadaran konservasi penonton.",
-                pertanyaan: "Unsur apa yang membuat film dokumenter tersebut dinilai berkualitas?",
-                pilihan: ["A. Visual sinematik yang jernih serta muatan edukasi konservasi yang kuat.", "B. Jalan cerita fiksi fiktif yang penuh kelucuan.", "C. Durasi film yang sangat singkat dan membosankan.", "D. Penggunaan efek suara ledakan buatan."],
-                kunci: 0, pembahasan: "Kualitas dokumenter diukur dari keindahan visual (sinematik) dan nilai edukasi/pesan konservasinya."
-            },
-            {
-                id: 27, kategori: "Pemahaman Tekstual",
-                stimulus: "Sumpah Pemuda yang diikrarkan pada tanggal 28 Oktober 1928 merupakan hasil keputusan Kongres Pemuda Kedua yang menegaskan cita-cita bertumpah darah satu, berbangsa satu, dan berbahasa satu, yaitu Indonesia.",
-                pertanyaan: "Kapan ikrar Sumpah Pemuda resmi dikumandangkan?",
-                pilihan: ["A. 17 Agustus 1945", "B. 28 Oktober 1928", "C. 20 Mei 1908", "D. 10 November 1945"],
-                kunci: 1, pembahasan: "Teks secara tersurat menyebutkan tanggal 28 Oktober 1928."
-            },
-            {
-                id: 28, kategori: "Pemahaman Inferensial",
-                stimulus: "Pemerintah daerah mulai membatasi izin pembangunan hotel baru di kawasan lindung air demi menjaga ketersediaan cadangan air bersih bagi warga jangka panjang.",
-                pertanyaan: "Apa prioritas utama yang dipertimbangkan oleh pemerintah daerah?",
-                pilihan: ["A. Keuntungan finansial pariwisata semata.", "B. Kelestarian lingkungan dan ketersediaan air bersih warga.", "C. Penambahan jumlah bangunan komersial di kawasan hijau.", "D. Penurunan jumlah wisatawan yang datang berkunjung."],
-                kunci: 1, pembahasan: "Pembatasan izin demi menjaga cadangan air bersih menunjukkan prioritas pada kelestarian lingkungan dan kepentingan warga."
-            },
-            {
-                id: 29, kategori: "Evaluasi dan Apresiasi",
-                stimulus: "Puisi lama seperti gurindam umumnya terdiri atas dua baris dalam setiap bait dengan rima akhir a-a, serta berisi nasihat moral atau ajaran agama yang mendalam.",
-                pertanyaan: "Manakah karakteristik utama bentuk gurindam berdasarkan teks?",
-                pilihan: ["A. Terdiri dari dua baris per bait dengan rima a-a dan berisi nasihat.", "B. Memiliki empat baris dengan sampiran dan isi.", "C. Berbentuk cerita prosa panjang tanpa bait.", "D. Ditulis menggunakan bahasa asing modern."],
-                kunci: 0, pembahasan: "Teks secara eksplisit mendefinisikan gurindam terdiri atas dua baris per bait berima a-a berisi nasihat."
-            },
-            {
-                id: 30, kategori: "Pemahaman Inferensial",
-                stimulus: "Kecintaan terhadap produk lokal di tanah air perlahan mulai menunjukkan tren peningkatan seiring kreativitas pelaku UMKM dalam mendesain produk yang lebih kompetitif dan berkualitas.",
-                pertanyaan: "Faktor apa yang mendorong peningkatan kecintaan terhadap produk lokal?",
-                pilihan: ["A. Penurunan kualitas dan desain produk lokal.", "B. Peningkatan kreativitas serta kualitas produk yang ditawarkan UMKM.", "C. Kewajiban mutlak pemerintah melarang barang impor.", "D. Harga produk lokal yang jauh lebih mahal dari barang luar."],
-                kunci: 1, pembahasan: "Teks menghubungkan tren peningkatan kecintaan produk lokal dengan kreativitas dan kualitas produk UMKM."
-            }
-        ];
-
-        let indexSoalAktif = 0;
-        let jawabanUser = Array(bankSoal.length).fill(null);
-        let timerInterval;
-        let sisaDetik = 2700;
-
-        const welcomeScreen = document.getElementById("welcome-screen");
-        const quizScreen = document.getElementById("quiz-screen");
-        const resultScreen = document.getElementById("result-screen");
-        
-        function mulaiUjianCustom() {
-            const inputNama = document.getElementById("nama-peserta").value.trim();
-            if (inputNama === "") {
-                alert("Silakan masukkan nama lengkap Anda terlebih dahulu!");
-                return;
-            }
-            namaSiswa = inputNama;
-            welcomeScreen.classList.add("hidden");
-            quizScreen.classList.remove("hidden");
-            document.getElementById("timer-box").classList.remove("hidden");
-            mulaiTimer();
-            muatSoal();
-        }
-
-        function mulaiTimer() {
-            timerInterval = setInterval(() => {
-                if (sisaDetik <= 0) {
-                    clearInterval(timerInterval);
-                    selesaikanUjian();
-                } else {
-                    sisaDetik--;
-                    let menit = Math.floor(sisaDetik / 60);
-                    let detik = sisaDetik % 60;
-                    document.getElementById("time-left").textContent = `${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
-                }
-            }, 1000);
-        }
-
-        function muatSoal() {
-            const soal = bankSoal[indexSoalAktif];
-            document.getElementById("question-number").textContent = `Soal ${indexSoalAktif + 1} dari ${bankSoal.length}`;
-            document.getElementById("category-badge").textContent = soal.kategori;
-            document.getElementById("stimulus-text").textContent = soal.stimulus;
-            document.getElementById("question-text").textContent = soal.pertanyaan;
-
-            const opsiContainer = document.getElementById("options-container");
-            opsiContainer.innerHTML = "";
-
-            soal.pilihan.forEach((opsi, index) => {
-                const isSelected = jawabanUser[indexSoalAktif] === index;
-                const button = document.createElement("button");
-                button.className = `w-full text-left p-4 rounded-xl border transition text-sm md:text-base flex items-center space-x-3 ${isSelected ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-medium shadow-sm' : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'}`;
-                button.innerHTML = `<span class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300 text-slate-500'}">${String.fromCharCode(65 + index)}</span><span>${opsi.substring(3)}</span>`;
-                button.onclick = () => pilihJawaban(index);
-                opsiContainer.appendChild(button);
-            });
-
-            document.getElementById("btn-prev").classList.toggle("hidden", indexSoalAktif === 0);
-            const btnNext = document.getElementById("btn-next");
-            btnNext.disabled = jawabanUser[indexSoalAktif] === null;
-            btnNext.textContent = indexSoalAktif === bankSoal.length - 1 ? "Selesai & Kumpulkan" : "Selanjutnya";
-        }
-
-        function pilihJawaban(indexOpsi) {
-            jawabanUser[indexSoalAktif] = indexOpsi;
-            muatSoal();
-        }
-
-        function soalBerikutnya() {
-            if (indexSoalAktif < bankSoal.length - 1) {
-                indexSoalAktif++;
-                muatSoal();
-            } else {
-                selesaikanUjian();
-            }
-        }
-
-        function soalSebelumnya() {
-            if (indexSoalAktif > 0) {
-                indexSoalAktif--;
-                muatSoal();
-            }
-        }
-
-        function selesaikanUjian() {
-            clearInterval(timerInterval);
-            quizScreen.classList.add("hidden");
-            document.getElementById("timer-box").classList.add("hidden");
-            resultScreen.classList.remove("hidden");
-
-            document.getElementById("sapaan-peserta").textContent = `Peserta: ${namaSiswa}`;
-
-            let skorTotal = 0;
-            const reviewContainer = document.getElementById("review-container");
-            reviewContainer.innerHTML = "";
-
-            bankSoal.forEach((soal, idx) => {
-                const jawabanUserIdx = jawabanUser[idx];
-                const isBenar = jawabanUserIdx === soal.kunci;
-                if (isBenar) skorTotal += (100 / bankSoal.length);
-
-                const reviewItem = document.createElement("div");
-                reviewItem.className = `p-4 rounded-xl border text-sm ${isBenar ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/35'}`;
-                reviewItem.innerHTML = `
-                    <div class="font-semibold text-slate-900 mb-1">Soal ${idx + 1}: ${soal.pertanyaan}</div>
-                    <div class="text-xs mb-1">Jawaban Anda: <span class="${isBenar ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}">${jawabanUserIdx !== null ? soal.pilihan[jawabanUserIdx] : 'Tidak dijawab'}</span></div>
-                    <div class="text-xs mb-2 text-slate-600">Kunci Jawaban: <span class="font-bold text-slate-800">${soal.pilihan[soal.kunci]}</span></div>
-                    <div class="text-xs text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100"><strong>Pembahasan:</strong> ${soal.pembahasan}</div>
-                `;
-                reviewContainer.appendChild(reviewItem);
-            });
-
-            const skorAkhir = Math.round(skorTotal);
-            document.getElementById("final-score").textContent = skorAkhir;
-
-            kirimDanMuatNilai(namaSiswa, skorAkhir);
-        }
-
-        function kirimDanMuatNilai(nama, skor) {
-            fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ data: { nama: nama, skor: skor } })
-            })
-            .then(response => response.json())
-            .then(data => {
-                muatLeaderboard();
-            })
-            .catch(error => console.error("Gagal mengirim nilai:", error));
-        }
-
-        function muatLeaderboard() {
-            const tbody = document.getElementById("leaderboard-body");
-            tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-xs">Memuat daftar nilai...</td></tr>`;
-
-            fetch(API_URL)
-                .then(response => response.json())
-                .then(data => {
-                    tbody.innerHTML = "";
-                    if (data.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-xs">Belum ada peserta yang mengumpulkan nilai.</td></tr>`;
-                        return;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     }
-                    data.sort((a, b) => b.skor - a.skor);
-
-                    data.forEach(row => {
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = `
-                            <td class="p-3 font-medium text-slate-800">${row.nama}</td>
-                            <td class="p-3 text-right font-bold text-indigo-600">${row.skor}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                })
-                .catch(error => {
-                    tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-xs text-rose-500">Gagal memuat papan nilai.</td></tr>`;
-                });
-        }
-
-        function resetUjian() {
-            indexSoalAktif = 0;
-            jawabanUser = Array(bankSoal.length).fill(null);
-            sisaDetik = 2700;
-            document.getElementById("nama-peserta").value = "";
-            resultScreen.classList.add("hidden");
-            welcomeScreen.classList.remove("hidden");
+                }
+            }
         }
     </script>
-</body>
-</html>
+    <style>
+        .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        /* Custom Scrollbar untuk grid nomor soal */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-3 sm:p-6">
+
+    <div class="w-full max-w-4xl bg-slate-900/70 backdrop-blur-2xl border border-slate-700/60 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 transition-all">
+
+        <!-- 1. HALAMAN REGISTRASI -->
+        <div id="register-screen" class="fade-in space-y-6 text-center py-6">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-indigo-400 font-semibold text-xs tracking-wider uppercase mb-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Simulasi Resmi Nasional TKA SMK
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Uji Kompetensi Akademik <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">SMK</span>
+            </h1>
+            <p class="text-slate-400 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+                Evaluasi komprehensif kemampuan Bahasa Indonesia dan Matematika kejuruan. Masukkan nama lengkap Anda untuk memulai sesi ujian.
+            </p>
+
+            <div class="max-w-md mx-auto space-y-4 pt-4">
+                <div class="relative">
+                    <input type="text" id="participant-name" placeholder="Ketik nama lengkap peserta..." 
+                        class="w-full bg-slate-800/90 border border-slate-700/80 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all font-semibold text-center text-lg shadow-inner">
+                </div>
+                <button onclick="startQuiz()" 
+                    class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all transform active:scale-[0.98]">
+                    Mulai Ujian Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. HALAMAN KUIS / SOAL -->
+        <div id="quiz-screen" class="hidden fade-in space-y-6">
+            <!-- Header Kuis: Info & Timer -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span id="quiz-category" class="text-xs uppercase tracking-wider font-extrabold px-3 py-1 bg-indigo-500/15 text-indigo-400 rounded-full border border-indigo-500/30"></span>
+                        <span id="participant-display" class="text-xs font-medium text-slate-400"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                    <div class="bg-slate-800/80 border border-slate-700/60 px-4 py-1.5 rounded-xl flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span id="timer-display" class="font-mono font-bold text-amber-400 text-sm">40:00</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400 block">Soal ke</span>
+                        <span class="text-lg font-bold text-white"><span id="current-q-num">1</span><span class="text-slate-600">/40</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layout Utama Soal & Navigasi Samping -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                
+                <!-- Area Pertanyaan (3 Kolom) -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="bg-slate-800/30 border border-slate-800/80 p-5 sm:p-6 rounded-2xl">
+                        <p id="question-text" class="text-base sm:text-lg font-medium text-slate-100 leading-relaxed"></p>
+                    </div>
+                    
+                    <div id="options-container" class="grid gap-3">
+                        <!-- Opsi pilihan ganda lewat JavaScript -->
+                    </div>
+
+                    <!-- Navigasi Bawah (Sebelumnya & Selanjutnya) -->
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevQuestion()" id="prev-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-5 py-2.5 rounded-xl text-sm transition-all border border-slate-700">
+                            ← Sebelumnya
+                        </button>
+                        <button onclick="nextQuestion()" id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-indigo-600/20">
+                            Selanjutnya →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panel Navigasi Nomor Soal (1 Kolom di Desktop, Accordion/Grid di Mobile) -->
+                <div class="bg-slate-800/40 border border-slate-700/60 p-4 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Daftar Soal</span>
+                        <span id="answered-count">0/40 Terjawab</span>
+                    </div>
+                    <div id="question-navigator" class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-4 gap-2 max-h-64 lg:max-h-[320px] overflow-y-auto p-1">
+                        <!-- Tombol nomor soal dibangkitkan otomatis -->
+                    </div>
+                    <button onclick="confirmSubmit()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-emerald-600/20 mt-2">
+                        Selesaikan Ujian
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. HALAMAN HASIL / NILAI -->
+        <div id="result-screen" class="hidden fade-in text-center space-y-6 py-4">
+            <div class="w-20 h-20 bg-gradient-to-tr from-indigo-500/20 to-cyan-500/20 border border-indigo-500/40 text-indigo-400 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-xl">
+                🏅
+            </div>
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Evaluasi Ujian Selesai</h2>
+                <p class="text-slate-400 text-sm mt-1">Laporan resmi hasil Uji Kompetensi Akademik SMK</p>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-3xl p-6 max-w-md mx-auto space-y-4 shadow-xl">
+                <div>
+                    <span class="text-xs text-slate-400 block uppercase tracking-wider font-semibold">Nama Peserta</span>
+                    <span id="res-name" class="text-xl font-bold text-white"></span>
+                </div>
+                <div class="pt-3 border-t border-slate-700/60">
+                    <span class="text-xs text-slate-400 block uppercase tracking-wider font-semibold">Nilai Akhir Skala 100</span>
+                    <span id="res-score" class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">0</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 pt-3 border-t border-slate-700/60 text-sm">
+                    <div class="bg-slate-900/70 p-3 rounded-2xl border border-slate-800">
+                        <span class="text-slate-400 block text-xs">Benar</span>
+                        <span id="res-correct" class="font-bold text-emerald-400 text-lg">0</span>
+                    </div>
+                    <div class="bg-slate-900/70 p-3 rounded-2xl border border-slate-800">
+                        <span class="text-slate-400 block text-xs">Salah</span>
+                        <span id="res-wrong" class="font-bold text-rose-400 text-lg">0</span>
+                    </div>
+                    <div class="bg-slate-900/70 p-3 rounded-2xl border border-slate-800">
+                        <span class="text-slate-400 block text-xs">Kosong</span>
+                        <span id="res-blank" class="font-bold text-amber-400 text-lg">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="resetQuiz()" 
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition-all text-sm">
+                Ulangi Simulasi Ujian
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Bank Soal Terstruktur Lengkap 40 Soal (20 B. Indonesia, 20 Matematika SMK)
+        const questions = [
+            // BAHASA INDONESIA (No 1 - 20)
+            { cat: "Bahasa Indonesia", q: "Cermati kalimat berikut: 'Pembangunan jembatan gantung itu memperlancar distribusi hasil pertanian warga.' Inti kalimat tersebut adalah...", opts: ["Pembangunan jembatan", "Memperlancar distribusi", "Distribusi hasil pertanian", "Pembangunan memperlancar"], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Bagian awal surat lamaran pekerjaan yang berisi informasi sumber perolehan lowongan pekerjaan dinamakan...", opts: ["Alamat tujuan surat", "Salam pembuka", "Pernyataan pembuka (alinea pembuka)", "Lampiran berkas persyaratan"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Penulisan gelar akademik yang sesuai dengan kaidah EYD/PUEBI adalah...", opts: ["Dr. H. Ahmad, M.Pd.", "Dr. H. Ahmad., M.Pd", "Dr. H. Ahmad, M.PD", "Doktor H. Ahmad Mpd."], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Di antara kelompok kata berikut, manakah yang seluruhnya merupakan kata baku...", opts: ["Apotik, sistim, aktif", "Jadwal, kuitansi, teknik", "Kwalitas, analisa, aktifitas", "Sistem, otentik, hirarki"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Teks laporan hasil observasi wajib disusun berdasarkan...", opts: ["Pendapat subjektif penulis", "Fakta objektif hasil pengamatan langsung", "Khayalan dan cerita rakyat", "Isu atau gosip yang sedang viral"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Ciri utama dari sebuah kalimat efektif adalah...", opts: ["Menggunakan kata-kata yang panjang dan berbunga", "Mengandung unsur pleonasme atau pengulangan makna", "Kesepadanan struktur, kehematan kata, dan kelogisan", "Selalu menggunakan istilah asing"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Sinonim kata 'inovasi' dalam bidang teknologi rekayasa adalah...", opts: ["Peniruan total", "Pembaruan atau penemuan baru", "Perusakan sistem", "Pemusnahan massal"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Kalimat yang mengandung majas personifikasi adalah...", opts: ["Suaranya merdu bagai buluh perindu.", "Mesin bubut itu bernyanyi keras di bengkel.", "Ia adalah tulang punggung keluarga besar.", "Dewi malam telah keluar dari peraduannya."], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Bagian akhir dari struktur teks eksposisi yang berisi simpulan atau pandangan penutup disebut...", opts: ["Tesis", "Argumentasi", "Penegasan ulang (Reiterasi)", "Orientasi awal"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Penulisan daftar pustaka dari buku yang bersumber dengan benar adalah...", opts: ["Keraf, Gorys. 2010. Komposisi. Ende: Nusa Indah.", "Gorys Keraf. Komposisi. Ende: Nusa Indah. 2010.", "2010. Keraf, Gorys. Komposisi. Ende: Nusa Indah.", "Komposisi. Keraf, Gorys. 2010. Ende: Nusa Indah."], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Tujuan utama dari pembuatan teks prosedur kompleks adalah...", opts: ["Menggambarkan kondisi fisik objek secara rinci", "Menjelaskan langkah-langkah sistematis melakukan sesuatu", "Menyampaikan kritik sosial secara humoris", "Menceritakan pengalaman masa lalu penulis"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Makna tersurat dalam sebuah wacana berita berarti...", opts: ["Makna tersembunyi di balik baris", "Makna harfiah yang tertulis secara jelas dan eksplisit", "Opini pribadi pembaca", "Kesimpulan umum redaksi"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Konjungsi (kata hubung) antarkalimat yang menyatakan pertentangan adalah...", opts: ["Oleh karena itu", "Meskipun demikian", "Dengan demikian", "Bahkan"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Judul karangan ilmiah yang sesuai dengan kaidah EYD adalah...", opts: ["Pentingnya menjaga kebersihan lingkungan sekolah", "Pentingnya Menjaga Kebersihan Lingkungan Sekolah", "Pentingnya Menjaga Kebersihan lingkungan sekolah", "pentingnya menjaga kebersihan lingkungan Sekolah"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Kalimat tanya retoris adalah kalimat tanya yang...", opts: ["Membutuhkan jawaban lisan secepatnya", "Tidak memerlukan jawaban karena jawabannya sudah jelas", "Diajukan oleh penguji sidang", "Bersifat rahasia negara"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Unsur intrinsik cerpen yang berkaitan dengan sudut pandang pencerita menempatkan posisi pengarang disebut...", opts: ["Alur cerita", "Latar tempat", "Sudut pandang (Point of View)", "Amanat moral"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Perbaikan kalimat tidak efektif 'Mereka saling pukul-memukuan di halaman' adalah...", opts: ["Mereka saling memukul di halaman.", "Mereka pukul-memukul di halaman.", "Pilihan A dan B benar.", "Mereka saling pukul-memukuan."], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Hal yang tidak perlu dicatat dalam menyusun ringkasan buku teks adalah...", opts: ["Gagasan utama setiap bab", "Komentar atau pendapat pribadi pembaca", "Data dan informasi penting", "Kesimpulan akhir buku"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Imbuhan gabung (konfiks) yang menyatakan 'proses' atau 'hasil perbuatan' terdapat pada kata...", opts: ["Pengecatan", "Rumahan", "Makanan", "Berlari"], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Dalam forum diskusi resmi, orang yang bertugas mengatur jalannya acara dan lalu lintas tanya jawab adalah...", opts: ["Notulen", "Moderator", "Sekretaris", "Narasumber utama"], ans: 1 },
+
+            // MATEMATIKA SMK (No 21 - 40)
+            { cat: "Matematika", q: "Hasil dari operasi bentuk pangkat $2^3 \\times 2^4$ adalah...", opts: ["$2^7$", "$2^{12}$", "$4^7$", "$16$"], ans: 0 },
+            { cat: "Matematika", q: "Bentuk sederhana dari penyederhanaan akar $\\sqrt{48}$ adalah...", opts: ["$2\\sqrt{3}$", "$4\\sqrt{3}$", "$6\\sqrt{2}$", "$8\\sqrt{3}$"], ans: 1 },
+            { cat: "Matematika", q: "Nilai dari hasil operasi logaritma $\\log_{10} 1000$ adalah...", opts: ["1", "2", "3", "10"], ans: 2 },
+            { cat: "Matematika", q: "Diketahui barisan aritmatika: 3, 7, 11, 15, ... Suku ke-10 ($U_{10}$) barisan tersebut adalah...", opts: ["35", "39", "43", "47"], ans: 1 },
+            { cat: "Matematika", q: "Jumlah 5 suku pertama dari deret geometri: $2 + 4 + 8 + 16 + ...$ adalah...", opts: ["30", "32", "62", "64"], ans: 2 },
+            { cat: "Matematika", q: "Akar-akar penyelesaian dari persamaan kuadrat $x^2 - 5x + 6 = 0$ adalah...", opts: ["$2$ dan $3$", "$-2$ dan $-3$", "$1$ dan $6$", "$-1$ dan $-6$"], ans: 0 },
+            { cat: "Matematika", q: "Nilai diskriminan ($D$) dari persamaan kuadrat $2x^2 - 4x + 1 = 0$ adalah...", opts: ["8", "12", "16", "24"], ans: 0 },
+            { cat: "Matematika", q: "Himpunan penyelesaian sistem persamaan linear $x + y = 5$ dan $x - y = 1$ adalah...", opts: ["$x = 2, y = 3$", "$x = 3, y = 2$", "$x = 4, y = 1$", "$x = 1, y = 4$"], ans: 1 },
+            { cat: "Matematika", q: "Diketahui matriks ordo 2x2: $A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}$. Determinan matriks A adalah...", opts: ["-2", "2", "10", "-10"], ans: 0 },
+            { cat: "Matematika", q: "Turunan pertama dari fungsi aljabar $f(x) = 3x^2 - 5x + 2$ adalah...", opts: ["$6x - 5$", "$3x - 5$", "$6x^2 - 5$", "$6x + 5$"], ans: 0 },
+            { cat: "Matematika", q: "Hasil dari integral tak tentu $\\int (4x - 3) dx$ adalah...", opts: ["$2x^2 - 3x + C$", "$4x^2 - 3x + C$", "$2x^2 - 3 + C$", "$4x^2 - 3 + C$"], ans: 0 },
+            { cat: "Matematika", q: "Luas permukaan segitiga yang memiliki panjang alas $10$ cm dan tinggi $8$ cm adalah...", opts: ["$80 \\text{ cm}^2$", "$40 \\text{ cm}^2$", "$20 \\text{ cm}^2$", "$18 \\text{ cm}^2$"], ans: 1 },
+            { cat: "Matematika", q: "Keliling lingkaran dengan panjang jari-jari $14$ cm (menggunakan $\\pi = \\frac{22}{7}$) adalah...", opts: ["$44$ cm", "$68$ cm", "$88$ cm", "$154$ cm"], ans: 2 },
+            { cat: "Matematika", q: "Nilai perbandingan trigonometri sudut istimewa $\\sin 30^\\circ$ adalah...", opts: ["$0$", "$\\frac{1}{2}$", "$\\frac{1}{2}\\sqrt{2}$", "$1$"], ans: 1 },
+            { cat: "Matematika", q: "Nilai rata-rata (mean) dari data nilai: 7, 8, 5, 6, 9 adalah...", opts: ["6", "7", "7.5", "8"], ans: 1 },
+            { cat: "Matematika", q: "Nilai median dari data terurut: 5, 6, 7, 7, 8, 8, 9 adalah...", opts: ["6", "7", "7.5", "8"], ans: 1 },
+            { cat: "Matematika", q: "Peluang empiris munculnya angka pada pelemparan sebuah mata uang logam seimbang adalah...", opts: ["$\\frac{1}{4}$", "$\\frac{1}{2}$", "$1$", "$0$"], ans: 1 },
+            { cat: "Matematika", q: "Banyak cara menyusun pengurus inti yang terdiri dari 3 orang dari 5 calon kandidat adalah...", opts: ["10", "20", "60", "120"], ans: 1 },
+            { cat: "Matematika", q: "Koordinat bayangan titik $(2, 3)$ oleh transformasi translasi vektor $T = (4, 1)$ adalah...", opts: ["$(6, 4)$", "$(2, 2)$", "$(-2, -2)$", "$(8, 3)$"], ans: 0 },
+            { cat: "Matematika", q: "Sebuah kotak balok memiliki ukuran panjang $8$ cm, lebar $6$ cm, dan tinggi $5$ cm. Volume balok tersebut adalah...", opts: ["$190 \\text{ cm}^3$", "$240 \\text{ cm}^3$", "$280 \\text{ cm}^3$", "$320 \\text{ cm}^3$"], ans: 1 }
+        ];
+
+        let currentIdx = 0;
+        let participantName = "";
+        let userAnswers = new Array(questions.length).fill(null);
+        let timerInterval = null;
+        let timeLeft = 40 * 60; // 40 Menit
+
+        const registerScreen = document.getElementById("re
