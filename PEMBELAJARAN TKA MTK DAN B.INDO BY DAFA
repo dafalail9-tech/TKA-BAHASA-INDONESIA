@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Kompetensi Akademik (TKA) SMK</title>
+    <!-- Google Fonts & Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10">
+
+        <!-- 1. HALAMAN REGISTRASI -->
+        <div id="register-screen" class="fade-in space-y-6 text-center">
+            <div class="inline-block p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl text-indigo-400 font-semibold text-sm mb-2">
+                Simulasi Resmi TKA SMK
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                Uji Kompetensi Akademik <span class="text-indigo-400">SMK</span>
+            </h1>
+            <p class="text-slate-400 max-w-md mx-auto text-sm sm:text-base">
+                Uji kemampuan Bahasa Indonesia dan Matematika kamu sekarang juga. Masukkan nama lengkapmu untuk memulai!
+            </p>
+
+            <div class="max-w-md mx-auto space-y-4 pt-4">
+                <input type="text" id="participant-name" placeholder="Ketik nama lengkap peserta..." 
+                    class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-center text-lg">
+                <button onclick="startQuiz()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all transform active:scale-[0.98]">
+                    Mulai Ujian Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. HALAMAN KUIS / SOAL -->
+        <div id="quiz-screen" class="hidden fade-in space-y-6">
+            <!-- Header Kuis -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <span id="quiz-category" class="text-xs uppercase tracking-wider font-bold px-3 py-1 bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20"></span>
+                    <h2 id="participant-display" class="text-sm font-semibold text-slate-300 mt-2"></h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block">Soal ke</span>
+                    <span class="text-xl font-bold text-white"><span id="current-q-num">1</span><span class="text-slate-600">/40</span></span>
+                </div>
+            </div>
+
+            <!-- Pertanyaan -->
+            <div class="space-y-4">
+                <p id="question-text" class="text-lg sm:text-xl font-semibold text-white leading-relaxed"></p>
+                <div id="options-container" class="grid gap-3 pt-2">
+                    <!-- Opsi Pilihan Ganda akan dimasukkan lewat JS -->
+                </div>
+            </div>
+
+            <!-- Footer Navigasi Soal -->
+            <div class="flex justify-between items-center pt-6 border-t border-slate-800">
+                <div class="text-xs text-slate-500 hidden sm:block">Pilih salah satu jawaban terbaik</div>
+                <button id="next-btn" onclick="nextQuestion()" disabled
+                    class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md ml-auto">
+                    Selanjutnya
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. HALAMAN HASIL / NILAI -->
+        <div id="result-screen" class="hidden fade-in text-center space-y-6 py-4">
+            <div class="w-20 h-20 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                🏆
+            </div>
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Hasil Ujian TKA SMK</h2>
+                <p class="text-slate-400 text-sm mt-1">Laporan resmi nilai kompetensi akademik peserta</p>
+            </div>
+
+            <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 max-w-sm mx-auto space-y-3">
+                <div>
+                    <span class="text-xs text-slate-400 block uppercase tracking-wider">Nama Peserta</span>
+                    <span id="res-name" class="text-xl font-bold text-white"></span>
+                </div>
+                <div class="pt-2 border-t border-slate-700/50">
+                    <span class="text-xs text-slate-400 block uppercase tracking-wider">Nilai Akhir</span>
+                    <span id="res-score" class="text-5xl font-extrabold text-indigo-400">0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-700/50 text-sm">
+                    <div class="bg-slate-900/60 p-2.5 rounded-xl">
+                        <span class="text-slate-400 block text-xs">Jawaban Benar</span>
+                        <span id="res-correct" class="font-bold text-emerald-400 text-base">0</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-2.5 rounded-xl">
+                        <span class="text-slate-400 block text-xs">Jawaban Salah</span>
+                        <span id="res-wrong" class="font-bold text-rose-400 text-base">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="resetQuiz()" 
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition-all">
+                Ulangi Ujian
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Bank Soal 40 Soal (Bahasa Indonesia & Matematika SMK)
+        const questions = [
+            // BAHASA INDONESIA (No 1 - 20)
+            { cat: "Bahasa Indonesia", q: "Cermati kalimat berikut: 'Pembangunan jembatan itu memperlancar distribusi hasil pertanian.' Inti kalimat tersebut adalah...", opts: ["Pembangunan jembatan", "Memperlancar distribusi", "Distribusi hasil pertanian", "Pembangunan memperlancar"], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Bagian surat lamaran pekerjaan yang berisi informasi sumber perolehan lowongan pekerjaan dinamakan...", opts: ["Alamat tujuan", "Salam pembuka", "Pernyataan pembuka/alinea pembuka", "Lampiran berkas"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Penulisan gelar akademik yang sesuai dengan EYD adalah...", opts: ["Dr. H. Ahmad, M.Pd.", "Dr. H. Ahmad., M.Pd", "Dr. H. Ahmad, M.PD", "Doktor H. Ahmad Mpd."], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Kata baku di bawah ini yang tepat adalah...", opts: ["Apotik", "Sistim", "Jadwal", "Kwalitas"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Teks laporan hasil observasi harus disusun berdasarkan...", opts: ["Pendapat pribadi penulis", "Fakta objektif hasil pengamatan", "Khayalan dan imajinasi", "Isu yang sedang viral"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Ciri utama dari kalimat efektif adalah...", opts: ["Bertele-tele dan panjang", "Menggunakan unsur pleonasme", "Kepepaduan, kelogisan, dan kehematan kata", "Menggunakan bahasa asing"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Sinonim kata 'inovasi' dalam bidang teknologi adalah...", opts: ["Peniruan", "Pembaruan", "Perusakan", "Pemusnahan"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Kalimat yang menggunakan majas personifikasi adalah...", opts: ["Suaranya merdu bagai buluh perindu.", "Pensil itu menari-nari di atas kertas putih.", "Ia adalah tulang punggung keluarga.", "Dewi malam telah keluar dari peraduannya."], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Bagian akhir dari struktur teks eksposisi disebut...", opts: ["Tesis", "Argumentasi", "Penegasan ulang (Reiterasi)", "Orientasi"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Penulisan penulisan daftar pustaka yang benar untuk buku adalah...", opts: ["Keraf, Gorys. 2010. Komposisi. Ende: Nusa Indah.", "Gorys Keraf. Komposisi. Ende: Nusa Indah. 2010.", "2010. Keraf, Gorys. Komposisi. Ende: Nusa Indah.", "Komposisi. Keraf, Gorys. 2010. Ende: Nusa Indah."], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Tujuan utama pembuatan teks prosedur adalah...", opts: ["Menggambarkan objek secara rinci", "Menjelaskan langkah-langkah melakukan sesuatu", "Menyampaikan kritik sosial", "Menceritakan pengalaman masa lalu"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Makna tersurat dalam sebuah teks berarti...", opts: ["Makna yang tersembunyi", "Makna harfiah yang tertulis secara jelas", "Pendapat pribadi pembaca", "Kesimpulan umum penulis"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Kata penghubung (konjungsi) pertentangan yang tepat adalah...", opts: ["Dan", "Tetapi", "Serta", "Lalu"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Judul karangan yang sesuai dengan kaidah EYD adalah...", opts: ["Pentingnya menjaga kebersihan lingkungan", "Pentingnya Menjaga Kebersihan Lingkungan", "Pentingnya Menjaga Kebersihan lingkungan", "pentingnya menjaga kebersihan lingkungan"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Kalimat tanya retoris adalah kalimat tanya yang...", opts: ["Membutuhkan jawaban segera", "Tidak memerlukan jawaban karena sudah jelas", "Diajukan oleh guru kepada murid", "Bersifat rahasia"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Unsur intrinsik cerpen yang berkaitan dengan sudut pandang pencerita disebut...", opts: ["Alur", "Latar", "Sudut pandang (Point of View)", "Amanat"], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Perbaikan kalimat 'Mereka saling pukul-memukuan di lapangan' yang benar adalah...", opts: ["Mereka saling memukul di lapangan.", "Mereka pukul-memukul di lapangan.", "Jawaban A dan B benar.", "Mereka saling pukul-memukuan."], ans: 2 },
+            { cat: "Bahasa Indonesia", q: "Hal yang tidak perlu dicatat dalam membuat rangkuman buku adalah...", opts: ["Gagasan utama tiap bab", "Pendapat pribadi atau komentar pembaca", "Informasi penting", "Kesimpulan isi buku"], ans: 1 },
+            { cat: "Bahasa Indonesia", q: "Imbuhan yang menyatakan 'proses' pada kata bentukan adalah...", opts: ["Pengecatan", "Rumah", "Makanan", "Berlari"], ans: 0 },
+            { cat: "Bahasa Indonesia", q: "Dalam diskusi, pemimpin diskusi disebut sebagai...", opts: ["Notulen", "Moderator", "Sekretaris", "Narasumber"], ans: 1 },
+
+            // MATEMATIKA SMK (No 21 - 40)
+            { cat: "Matematika", q: "Hasil dari $2^3 \\times 2^4$ adalah...", opts: ["$2^7$", "$2^{12}$", "$4^7$", "$16$"], ans: 0 },
+            { cat: "Matematika", q: "Bentuk sederhana dari $\\sqrt{48}$ adalah...", opts: ["$2\\sqrt{3}$", "$4\\sqrt{3}$", "$6\\sqrt{2}$", "$8\\sqrt{3}$"], ans: 1 },
+            { cat: "Matematika", q: "Nilai dari $\\log_{10} 1000$ adalah...", opts: ["1", "2", "3", "10"], ans: 2 },
+            { cat: "Matematika", q: "Jika diketahui barisan aritmatika: 3, 7, 11, 15, ..., maka suku ke-10 ($U_{10}$) adalah...", opts: ["35", "39", "43", "47"], ans: 1 },
+            { cat: "Matematika", q: "Jumlah 5 suku pertama deret geometri: $2 + 4 + 8 + 16 + ...$ adalah...", opts: ["30", "32", "62", "64"], ans: 2 },
+            { cat: "Matematika", q: "Akar-akar persamaan kuadrat $x^2 - 5x + 6 = 0$ adalah...", opts: ["$2$ dan $3$", "$-2$ dan $-3$", "$1$ dan $6$", "$-1$ dan $-6$"], ans: 0 },
+            { cat: "Matematika", q: "Nilai diskriminan dari persamaan kuadrat $2x^2 - 4x + 1 = 0$ adalah...", opts: ["8", "12", "16", "24"], ans: 0 },
+            { cat: "Matematika", q: "Penyelesaian dari sistem persamaan $x + y = 5$ dan $x - y = 1$ adalah...", opts: ["$x = 2, y = 3$", "$x = 3, y = 2$", "$x = 4, y = 1$", "$x = 1, y = 4$"], ans: 1 },
+            { cat: "Matematika", q: "Diketahui matriks $A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}$. Determinan matriks A adalah...", opts: ["-2", "2", "10", "-10"], ans: 0 },
+            { cat: "Matematika", q: "Turunan pertama dari fungsi $f(x) = 3x^2 - 5x + 2$ adalah...", opts: ["$6x - 5$", "$3x - 5$", "$6x^2 - 5$", "$6x + 5$"], ans: 0 },
+            { cat: "Matematika", q: "Nilai dari $\\int (4x - 3) dx$ adalah...", opts: ["$2x^2 - 3x + C$", "$4x^2 - 3x + C$", "$2x^2 - 3 + C$", "$4x^2 - 3 + C$"], ans: 0 },
+            { cat: "Matematika", q: "Luas segitiga dengan panjang sisi alas $10$ cm dan tinggi $8$ cm adalah...", opts: ["$80 \\text{ cm}^2$", "$40 \\text{ cm}^2$", "$20 \\text{ cm}^2$", "$18 \\text{ cm}^2$"], ans: 1 },
+            { cat: "Matematika", q: "Keliling lingkaran dengan jari-jari $14$ cm ($\\pi = \\frac{22}{7}$) adalah...", opts: ["$44$ cm", "$68$ cm", "$88$ cm", "$154$ cm"], ans: 2 },
+            { cat: "Matematika", q: "Besar sudut istimewa $\\sin 30^\\circ$ adalah...", opts: ["$0$", "$\\frac{1}{2}$", "$\\frac{1}{2}\\sqrt{2}$", "$1$"], ans: 1 },
+            { cat: "Matematika", q: "Rata-rata (mean) dari data: 7, 8, 5, 6, 9 adalah...", opts: ["6", "7", "7.5", "8"], ans: 1 },
+            { cat: "Matematika", q: "Median dari data nilai: 6, 7, 8, 9, 5, 7, 8 adalah...", opts: ["6", "7", "7.5", "8"], ans: 1 },
+            { cat: "Matematika", q: "Peluang munculnya angka pada pelemparan sebuah mata uang logam adalah...", opts: ["$\\frac{1}{4}$", "$\\frac{1}{2}$", "$1$", "$0$"], ans: 1 },
+            { cat: "Matematika", q: "Banyak cara menyusun 3 pengurus dari 5 orang calon pengurus kelas adalah...", opts: ["10", "20", "60", "120"], ans: 1 },
+            { cat: "Matematika", q: "Bayangan titik $(2, 3)$ oleh translasi $T = (4, 1)$ adalah...", opts: ["$(6, 4)$", "$(2, 2)$", "$(-2, -2)$", "$((8, 3)$"], ans: 0 },
+            { cat: "Matematika", q: "Sebuah balok memiliki panjang $8$ cm, lebar $6$ cm, dan tinggi $5$ cm. Volume balok tersebut adalah...", opts: ["$190 \\text{ cm}^3$", "$240 \\text{ cm}^3$", "$280 \\text{ cm}^3$", "$320 \\text{ cm}^3$"], ans: 1 }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let participantName = "";
+        let selectedOption = null;
+
+        const registerScreen = document.getElementById("register-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const resultScreen = document.getElementById("result-screen");
+
+        function startQuiz() {
+            const inputName = document.getElementById("participant-name").value.trim();
+            if (!inputName) {
+                alert("Silakan masukkan nama lengkap terlebih dahulu!");
+                return;
+            }
+            participantName = inputName;
+            document.getElementById("participant-display").innerText = `Peserta: ${participantName}`;
+            
+            registerScreen.classList.add("hidden");
+            quizScreen.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            selectedOption = null;
+            document.getElementById("next-btn").disabled = true;
+            
+            const q = questions[currentIdx];
+            document.getElementById("quiz-category").innerText = q.cat;
+            document.getElementById("current-q-num").innerText = currentIdx + 1;
+            document.getElementById("question-text").innerText = q.q;
+
+            const optContainer = document.getElementById("options-container");
+            optContainer.innerHTML = "";
+
+            q.opts.forEach((opt, index) => {
+                const btn = document.createElement("button");
+                btn.className = "w-full text-left p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 transition-all font-medium text-slate-200 flex items-center group";
+                btn.innerHTML = `<span class="w-8 h-8 rounded-xl bg-slate-700/50 flex items-center justify-center mr-4 text-xs font-bold text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">${String.fromCharCode(65 + index)}</span> <span class="flex-1">${opt}</span>`;
+                btn.onclick = () => selectAnswer(index, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(index, btnElement) {
+            const allBtns = document.getElementById("options-container").children;
+            for (let b of allBtns) {
+                b.className = "w-full text-left p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-indigo-500 hover:bg-slate-800 transition-all font-medium text-slate-200 flex items-center group";
+            }
+            btnElement.className = "w-full text-left p-4 rounded-2xl bg-indigo-600/20 border-2 border-indigo-500 transition-all font-medium text-white flex items-center shadow-lg shadow-indigo-500/10";
+            
+            selectedOption = index;
+            document.getElementById("next-btn").disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedOption === null) return;
+
+            if (selectedOption === questions[currentIdx].ans) {
+                correctCount++;
+            } else {
+                wrongCount++;
+            }
+
+            currentIdx++;
+            if (currentIdx < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizScreen.classList.add("hidden");
+            resultScreen.classList.remove("hidden");
+
+            // Hitung nilai akhir skala 0 - 100
+            let finalScore = Math.round((correctCount / questions.length) * 100);
+
+            document.getElementById("res-name").innerText = participantName;
+            document.getElementById("res-score").innerText = finalScore;
+            document.getElementById("res-correct").innerText = correctCount;
+            document.getElementById("res-wrong").innerText = wrongCount;
+        }
+
+        function resetQuiz() {
+            currentIdx = 0;
+            score = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            selectedOption = null;
+            document.getElementById("participant-name").value = "";
+            resultScreen.classList.add("hidden");
+            registerScreen.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
